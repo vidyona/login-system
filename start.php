@@ -4,7 +4,11 @@
 if(isset($_COOKIE["token"])){
 	$ctoken = $_COOKIE["token"];
 	
-	$conn = mysqli_connect("localhost", "root") or die('{"loginStatus":"Couldn\'t connect"}');
+	$localhost = "192.168.0.192:3306";
+$adminUser = "root";
+$adminPass = "root";
+
+$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
 	
 	mysqli_select_db($conn, "login");
 

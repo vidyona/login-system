@@ -23,7 +23,7 @@ function login(mode){
 	xhttp.onreadystatechange = function(){
 		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
 			
-			console.log(xhttp.responseText);
+			alert(xhttp.responseText);
 			var response = JSON.parse(xhttp.responseText);
 			
 			recieve(response);
@@ -83,6 +83,7 @@ function send(xhttp, page, data){
 }
 
 function userdata(response){
+				console.log(response);
 	$(".name").value = response.name;
 	$(".dob").value = response.dob;
 	$(".country").value = response.country;

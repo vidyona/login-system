@@ -1,7 +1,11 @@
 <?php
 //error_reporting(0);
 
-$conn = mysqli_connect("localhost", "root");
+$localhost = "192.168.0.192:3306";
+$adminUser = "root";
+$adminPass = "root";
+
+$conn = mysqli_connect($localhost, $adminUser, $adminPass);
 
 mysqli_select_db($conn, "login");
 

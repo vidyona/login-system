@@ -35,7 +35,12 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
 	$pass = $_POST["password"];
 }else{echo '{"loginStatus": "variables not set"}';}
 
-$conn = mysqli_connect("localhost", "root");
+$localhost = "192.168.0.192:3306";
+$adminUser = "root";
+$adminPass = "root";
+
+$conn = mysqli_connect($localhost, $adminUser, $adminPass);
+
 mysqli_select_db($conn, "login");
 
 $sql = "SELECT userid, password FROM userdata WHERE userid LIKE '$user'";
