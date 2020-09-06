@@ -1,4 +1,6 @@
 <?php
+include("mysqli_config.php");
+
 if(isset($_POST["name"])
 && isset($_POST["dob"])
 && isset($_POST["country"])
@@ -14,11 +16,7 @@ if(isset($_POST["name"])
 if(isset($_COOKIE["token"])){
 	$c_token = $_COOKIE["token"];
 
-	$localhost = "192.168.0.192:3306";
-$adminUser = "root";
-$adminPass = "root";
-
-$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
+	$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
 
 	mysqli_select_db($conn, "login");
 
@@ -32,7 +30,10 @@ $conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus
 	}
 	
 	if($s_token == $c_token){
-		$query = "UPDATE userdata SET name = '$name', dob = '$dob', country = '$country', favcolor = '$favcolor' WHERE userid LIKE '$s_uid'";
+		$query = "UPDATE userdata SET name = '$name',
+			dob = '$dob',
+			country = '$country',
+			favcolor = '$favcolor' WHERE userid LIKE '$s_uid'";
 		mysqli_query($conn, $query);
 		
 		echo '{"loginStatus": "dataUpdated"}';

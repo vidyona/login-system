@@ -1,14 +1,11 @@
 <?php
 //error_reporting(0);
+include("mysqli_config.php");
 
 if(isset($_COOKIE["token"])){
 	$ctoken = $_COOKIE["token"];
-	
-	$localhost = "192.168.0.192:3306";
-$adminUser = "root";
-$adminPass = "root";
 
-$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
+	$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
 	
 	mysqli_select_db($conn, "login");
 
@@ -21,7 +18,7 @@ $conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus
 		$s_token = $row["token"];
 	}
 	
-	if($s_token == $ctoken){
+	if($s_userid && $s_token && $s_token == $ctoken){
 		$query = "SELECT name, dob, country, favcolor FROM userdata WHERE userid LIKE '$s_userid'";
 		$userdata = mysqli_query($conn, $query);
 		
@@ -30,9 +27,9 @@ $conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus
 		$dob = $row["dob"];
 		$country = $row["country"];
 		$favcolor = $row["favcolor"];
-		}
-	
+
 		echo '{"loginStatus":"logged in", "name": "'.$name.'", "dob": "'.$dob.'", "country": "'.$country.'", "favcolor": "'.$favcolor.'"}';
+		}
 	}else{
 		echo '{"loginStatus":"log in"}';
 	}

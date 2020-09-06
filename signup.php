@@ -1,30 +1,12 @@
 <?php
 //error_reporting(0);
-function getToken($conn){
-	$token = bin2hex(random_bytes(64));
-	
-	$query = "SELECT token FROM usertoken WHERE token LIKE '$token'";
-	$s_token = mysqli_query($conn, $query);
-	
-	if($row = mysqli_fetch_array($s_token)){
-		$s_token = $row["token"];
-	}
-	
-	if($s_token != $token){
-		return $token;
-	}else{
-		echo false;
-	}
-}
+include("token.php");
+include("mysqli_config.php");
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
 $user = $_POST["username"];
 $pass = $_POST["password"];
 }else{echo '{"loginStatus": "variables not set"}';}
-
-$localhost = "192.168.0.192:3306";
-$adminUser = "root";
-$adminPass = "root";
 
 $conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
 

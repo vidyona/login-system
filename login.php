@@ -1,43 +1,40 @@
 <?php
+header('Content-Type: application/json');
+
 //error_reporting(0);
-function getToken($conn){
-	$token = bin2hex(random_bytes(64));
-	
-	$query = "SELECT token FROM usertoken WHERE token LIKE '$token'";
-	$s_token = mysqli_query($conn, $query);
-	
-	if($row = mysqli_fetch_array($s_token)){
-		$s_token = $row["token"];
-	}
-	
-	if($s_token != $token){
-		return $token;
-	}else{
-		echo false;
-	}
-}
+include("token.php");
+include("mysqli_config.php");
+include("classes.php");
 
 function getuserdata($conn, $s_user){
 	$query = "SELECT name, dob, country, favcolor FROM userdata WHERE userid LIKE '$s_user'";
-	$userdata = mysqli_query($conn, $query);
+	$userdataQ = mysqli_query($conn, $query);
 		
-	if($row = mysqli_fetch_array($userdata)){
+	if($row = mysqli_fetch_array($userdataQ)){
+		$loginStatus = "logged in";
 		$name = $row["name"];
 		$dob = $row["dob"];
 		$country = $row["country"];
 		$favcolor = $row["favcolor"];
+
+		$userData = new UserData();
+
+		$userData->loginStatus = $loginStatus;
+		$userData->name = $name;
+		$userData->dob = $dob;
+		$userData->country = $country;
+		$userData->favcolor = $favcolor;
+
+		return $userData;
+	} else {
+		return $row;
 	}
-		return '{"loginStatus":"logged in", "name": "'.$name.'", "dob": "'.$dob.'", "country": "'.$country.'", "favcolor": "'.$favcolor.'"}';
 }
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
 	$pass = $_POST["password"];
 }else{echo '{"loginStatus": "variables not set"}';}
-
-$localhost = "192.168.0.192:3306";
-$adminUser = "root";
-$adminPass = "root";
 
 $conn = mysqli_connect($localhost, $adminUser, $adminPass);
 
@@ -46,7 +43,8 @@ mysqli_select_db($conn, "login");
 $sql = "SELECT userid, password FROM userdata WHERE userid LIKE '$user'";
 $uid_pass = mysqli_query($conn, $sql);
 
-if($row = mysqli_fetch_array($uid_pass)){
+
+if($uid_pass && $row = mysqli_fetch_array($uid_pass)){
 	$s_user = $row['userid'];
 	$s_pass = $row['password'];
 }
@@ -62,10 +60,14 @@ if(isset($s_user) && $user == $s_user){
 		}else{
 			echo '{"loginStatus":"token exists"}';
 		}
-	
-		echo getuserdata($conn, $s_user);
+		
+		$userData = getuserdata($conn, $s_user);
 
-	}else if($user != "Vishesh" || $pass != "secret"){
+		if($userData){
+			echo json_encode($userData);
+		}
+
+	}else if($pass != $s_pass){
 		echo '{"loginStatus":"incorrectpass"}';
 	}
 }else{

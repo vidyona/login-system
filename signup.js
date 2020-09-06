@@ -16,7 +16,7 @@ function login(mode, n, p){
 	
 	xhttp.onreadystatechange = function(){
 		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
-			alert(xhttp.responseText);
+			console.log(xhttp.responseText);
 			var response = JSON.parse(xhttp.responseText);
 			
 			if(response.loginStatus == "userExists"){

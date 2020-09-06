@@ -1,9 +1,8 @@
 <?php
 //error_reporting(0);
 
-$localhost = "192.168.0.192:3306";
-$adminUser = "root";
-$adminPass = "root";
+include("token.php");
+include("mysqli_config.php");
 
 $conn = mysqli_connect($localhost, $adminUser, $adminPass);
 
@@ -20,6 +19,8 @@ if(isset($_COOKIE["token"])){
 }else{
 	echo '{"loginStatus":"logged out"}';
 }
+
+
 
 mysqli_close($conn);
 ?>

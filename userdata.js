@@ -4,7 +4,10 @@ function $All(e){return document.querySelectorAll(e);}
 window.onload = function(){
 	login("start");
 	
-	$(".ssubmit").addEventListener("click", function(){
+	$(".ssubmit").addEventListener("click", () => {
+		login("save");
+	});
+	$("body").addEventListener("keydown", () => {
 		login("save");
 	});
 	
@@ -23,7 +26,7 @@ function login(mode){
 	xhttp.onreadystatechange = function(){
 		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
 			
-			alert(xhttp.responseText);
+			console.log(xhttp.responseText);
 			var response = JSON.parse(xhttp.responseText);
 			
 			recieve(response);
@@ -85,7 +88,8 @@ function send(xhttp, page, data){
 function userdata(response){
 				console.log(response);
 	$(".name").value = response.name;
-	$(".dob").value = response.dob;
+	var dob = response.dob.slice(0, 10);
+	$(".dob").value = dob; console.log(dob); console.log($(".dob").value);
 	$(".country").value = response.country;
 	$(".favcolor").value = response.favcolor;
 }
