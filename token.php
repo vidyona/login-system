@@ -15,4 +15,25 @@ function getToken($conn){
 		echo false;
 	}
 }
+
+function setToken($conn, $user){
+    $token = getToken($conn);
+    
+    if($token){
+        $query = "insert into usertoken(userid, token) values('$user', '$token')";
+	    mysqli_query($conn, $query);
+        setcookie("token", $token, time() + 3600, "/", false, false);
+    }else{
+        echo '{"message":"token exists"}';
+	}
+	
+	tokenCleanUp($conn);
+}
+
+function tokenCleanUp($conn){
+	$query = "DELETE FROM usertoken WHERE TIMESTAMPDIFF(MINUTE, time, CURRENT_TIMESTAMP) > 60";
+	mysqli_query($conn, $query);
+
+	echo '{"message":"token cleaned up"}';
+}
 ?>

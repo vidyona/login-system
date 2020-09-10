@@ -6,9 +6,9 @@ include("mysqli_config.php");
 if(isset($_POST["username"]) && isset($_POST["password"])){
 $user = $_POST["username"];
 $pass = $_POST["password"];
-}else{echo '{"loginStatus": "variables not set"}';}
+}else{echo '{"message": "variables not set"}';}
 
-$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"loginStatus":"Couldn\'t connect"}');
+$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"message":"Couldn\'t connect"}');
 
 mysqli_select_db($conn, "login");
 
@@ -20,22 +20,14 @@ if($row = mysqli_fetch_array($s_user)){
 }
 
 if($s_user == $user){
-	echo '{"loginStatus": "userExists"}';
+	echo '{"message": "userExists"}';
 }else{
 	$query = "insert into userdata(userid, password) values('$user', '$pass')";
 	mysqli_query($conn, $query);
 	
-	$token = getToken($conn);
+	setToken($conn, $user);
 	
-	if($token){
-		$query = "insert into usertoken(userid, token) values('$user', '$token')";
-		mysqli_query($conn, $query);
-		setcookie("token", $token, time() + 3600, "/");
-	}else{
-		echo '{"loginStatus":"token exists"}';
-	}
-	
-	echo '{"loginStatus": "signed up"}';
+	echo '{"message": "signed up"}';
 }
 
 mysqli_close($conn);

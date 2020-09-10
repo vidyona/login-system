@@ -15,9 +15,9 @@ if(isset($_COOKIE["token"])){
 	mysqli_query($conn, $query);
 	setcookie("token", "", 0, "/");
 	
-	echo '{"loginStatus":"logged out"}';
+	echo '{"message":"logged out"}';
 }else{
-	echo '{"loginStatus":"logged out"}';
+	echo '{"message":"logged out"}';
 }
 
 

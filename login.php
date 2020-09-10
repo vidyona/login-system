@@ -5,36 +5,12 @@ header('Content-Type: application/json');
 include("token.php");
 include("mysqli_config.php");
 include("classes.php");
-
-function getuserdata($conn, $s_user){
-	$query = "SELECT name, dob, country, favcolor FROM userdata WHERE userid LIKE '$s_user'";
-	$userdataQ = mysqli_query($conn, $query);
-		
-	if($row = mysqli_fetch_array($userdataQ)){
-		$loginStatus = "logged in";
-		$name = $row["name"];
-		$dob = $row["dob"];
-		$country = $row["country"];
-		$favcolor = $row["favcolor"];
-
-		$userData = new UserData();
-
-		$userData->loginStatus = $loginStatus;
-		$userData->name = $name;
-		$userData->dob = $dob;
-		$userData->country = $country;
-		$userData->favcolor = $favcolor;
-
-		return $userData;
-	} else {
-		return $row;
-	}
-}
+include("getUserData.php");
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
 	$pass = $_POST["password"];
-}else{echo '{"loginStatus": "variables not set"}';}
+}else{echo '{"message": "variables not set"}';}
 
 $conn = mysqli_connect($localhost, $adminUser, $adminPass);
 
@@ -51,15 +27,7 @@ if($uid_pass && $row = mysqli_fetch_array($uid_pass)){
 
 if(isset($s_user) && $user == $s_user){
 	if($pass == $s_pass){
-		$token = getToken($conn);
-	
-		if($token){
-			$query = "insert into usertoken(userid, token) values('$user', '$token')";
-			mysqli_query($conn, $query);
-			setcookie("token", $token, time() + 3600, "/", false, false);
-		}else{
-			echo '{"loginStatus":"token exists"}';
-		}
+		setToken($conn, $user);
 		
 		$userData = getuserdata($conn, $s_user);
 
@@ -68,10 +36,10 @@ if(isset($s_user) && $user == $s_user){
 		}
 
 	}else if($pass != $s_pass){
-		echo '{"loginStatus":"incorrectpass"}';
+		echo '{"message":"incorrectpass"}';
 	}
 }else{
-	echo '{"loginStatus":"usernotfound"}';
+	echo '{"message":"usernotfound"}';
 }
 
 mysqli_close($conn);

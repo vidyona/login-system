@@ -1,21 +1,17 @@
-function $(e){return document.querySelector(e);}
-function $All(e){return document.querySelectorAll(e);}
-
 window.onload = function(){
 	login("start");
 	
-	$(".signupb").addEventListener("click", function(){
-		console.log("signupb clicked");
+	$aEL($(".signupb"), "click", () => {
 		location.href = "signup.html";
 	});
 	
-	$(".lsubmit").addEventListener("click", validate);
+	$aEL($(".lsubmit"), "click", validate);
 	
-	$(".password").addEventListener("focus", function(){
+	$aEL($(".password"), "focus", () => {
 		$(".password").removeAttribute("readonly");
 	});
 	
-	$(".login").addEventListener("input", function(){
+	$aEL($(".login"), "input", () => {
 		$(".alert").innerHTML = "";
 	});
 }
@@ -38,22 +34,34 @@ function validate(){
 		
 }
 
+function responseHandler(responseText){
+	console.log(responseText);
+
+	var list = responseText.split("{");
+
+	for(var item of list){
+		if(item != ""){
+			obj = "{" + item;
+
+			var response = JSON.parse(obj);
+			
+			if(response.message == "logged in"){
+				location.href = "userdata.html";
+			}else if(response.message == "usernotfound"){
+				$(".alert").innerHTML = "Incorrect username";
+			}else if(response.message == "incorrectpass"){
+				$(".alert").innerHTML = "Incorrect password";
+			}
+		}
+	}
+}
+
 function login(mode, n, p){
 	xhttp = new XMLHttpRequest();
 	
-	xhttp.onreadystatechange = function(){
+	xhttp.onreadystatechange = () => {
 		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
-			console.log(xhttp.responseText);
-			var response = JSON.parse(xhttp.responseText);
-			
-			if(response.loginStatus == "logged in"){
-				location.href = "userdata.html";
-				
-			}else if(response.loginStatus == "usernotfound"){
-				$(".alert").innerHTML = "Incorrect username";
-			}else if(response.loginStatus == "incorrectpass"){
-				$(".alert").innerHTML = "Incorrect password";
-			}
+			responseHandler(xhttp.responseText);
 		}
 	};
 	

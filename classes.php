@@ -1,7 +1,7 @@
 <?php
 
 class UserData {
-    public $loginStatus = "", $name = "", $dob = "", $country = "", $favcolor = "";
+    public $message = "", $name = "", $dob = "", $country = "", $favcolor = "";
 }
 
 ?>

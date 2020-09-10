@@ -1,14 +1,32 @@
-function $(e){return document.querySelector(e);}
-function $All(e){return document.querySelectorAll(e);}
-
 window.onload = function(){
 	login("start");
+
+	$aEL($(".loginb"), "click", () => {location.href = "index.html"});
 	
-	$("button[name='rsubmit']").addEventListener("click", function(){
+	$aEL($("button[name='rsubmit']"), "click", () => {
 		login("signup");
-		//console.log("rsubmit clicked");
 	});
-	
+}
+
+function responseHandler(responseText){
+	console.log(responseText);
+
+	var list = responseText.split("{");
+
+	for(var item of list){
+		if(item != ""){
+			obj = "{" + item;
+
+			var response = JSON.parse(obj);
+			
+			if(response.message == "userExists"){
+				$(".alert").innerHTML = "Username already exists";
+			}else if(response.message == "signed up"){
+				localStorage.signedup = true;
+				location.href = "userdata.html";
+			}
+		}
+	}
 }
 
 function login(mode, n, p){
@@ -16,15 +34,7 @@ function login(mode, n, p){
 	
 	xhttp.onreadystatechange = function(){
 		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
-			console.log(xhttp.responseText);
-			var response = JSON.parse(xhttp.responseText);
-			
-			if(response.loginStatus == "userExists"){
-				$(".alert").innerHTML = "Username already exists";
-			}else if(response.loginStatus == "signed up"){
-				localStorage.signedup = true;
-				location.href = "userdata.html";
-			}
+			responseHandler(xhttp.responseText);
 		}
 	};
 	

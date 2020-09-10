@@ -1,17 +1,20 @@
-function $(e){return document.querySelector(e);}
-function $All(e){return document.querySelectorAll(e);}
+class UserData{
+	constructor(name, dob, country, favcolor){
+		this.name = name,
+		this.dob = dob,
+		this.country = country,
+		this.favcolor = favcolor
+	}
+}
 
-window.onload = function(){
+window.onload = () => {
 	login("start");
 	
-	$(".ssubmit").addEventListener("click", () => {
-		login("save");
-	});
-	$("body").addEventListener("keydown", () => {
+	$aEL($("body"), "input", () => {
 		login("save");
 	});
 	
-	$(".logout").addEventListener("click", function(){
+	$aEL($(".logout"), "click", () => {
 		login("lout");
 	});
 	
@@ -20,60 +23,63 @@ window.onload = function(){
 	}
 }
 
-function login(mode){
-	xhttp = new XMLHttpRequest();
-	
-	xhttp.onreadystatechange = function(){
-		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
-			
-			console.log(xhttp.responseText);
-			var response = JSON.parse(xhttp.responseText);
+function responseHandler(responseText){
+	console.log(responseText);
+
+	var list = responseText.split("{");
+
+	for(var item of list){
+		if(item != ""){
+			obj = "{" + item;
+
+			var response = JSON.parse(obj);
 			
 			recieve(response);
 		}
-	};
-	
-	if(mode == "save"){
-		console.log("save");
-		
-		var n = $(".name").value;
-		var dob = $(".dob").value;
-		var c = $(".country").value;
-		var fc = $(".favcolor").value;
-		
-		var data = "name="+n+"&dob="+dob+"&country="+c+"&favcolor="+fc;
-		
-		send(xhttp, "save.php", data);
-		
-	}else if(mode == "lout"){
-		console.log("lout");
-		
-		send(xhttp, "logout.php", "");
-		
-	}else if(mode == "start"){
-		console.log("start");
-		
-		send(xhttp, "start.php", "");
 	}
 }
 
-function recieve(response){
-	if(response.loginStatus == "logged in"){
-		console.log("logged in");
+function login(mode){
+	xhttp = new XMLHttpRequest();
+	
+	xhttp.onreadystatechange = () => {
+		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
+			responseHandler(xhttp.responseText);
+		}
+	};
+	
+	switch(mode){
+		case "save": saveData();
+		break;
 		
-		userdata(response);
+		case "lout":
+		console.log("lout");
 		
-	}else if(response.loginStatus == "dataUpdated"){
-		console.log("dataUpdated");
+		send(xhttp, "logout.php", "");
+		break;
+
+		case "start":
+		console.log("start");
 		
-	}else if(response.loginStatus == "logged out"){
-		console.log("logged out");
-		location.href = "index.html";
+		send(xhttp, "start.php", "");
+		break;
 		
-	}else if(response.loginStatus == "log in"){
-		console.log("log in");
-		location.href = "index.html";
+		default: console.log("invalid option");
 	}
+}
+
+function saveData(){
+	var name = $(".name").value;
+	var dob = $(".dob").value;
+	var country = $(".country").value;
+	var favcolor = $(".favcolor").value;
+
+	var userdata = new UserData(name, dob, country, favcolor);
+		
+	//var data = "name="+n+"&dob="+dob+"&country="+c+"&favcolor="+fc;
+	var data = "userdata=" + JSON.stringify(userdata);
+		
+	send(xhttp, "save.php", data);
 }
 
 function send(xhttp, page, data){
@@ -85,11 +91,29 @@ function send(xhttp, page, data){
 	xhttp.send(data);
 }
 
+function recieve(response){
+	console.log(response.message);
+	switch(response.message){
+		case "logged in":
+			userdata(response);
+		break;
+
+		case "logged out":
+			location.href = "index.html";
+		break;
+
+		case "log in":
+			location.href = "index.html";
+		break;
+
+		default: "out of options";
+	}
+}
+
 function userdata(response){
-				console.log(response);
 	$(".name").value = response.name;
 	var dob = response.dob.slice(0, 10);
-	$(".dob").value = dob; console.log(dob); console.log($(".dob").value);
+	$(".dob").value = dob;
 	$(".country").value = response.country;
 	$(".favcolor").value = response.favcolor;
 }
