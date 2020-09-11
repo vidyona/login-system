@@ -45,14 +45,27 @@ function responseHandler(responseText){
 
 			var response = JSON.parse(obj);
 			
-			if(response.message == "logged in"){
-				location.href = "userdata.html";
-			}else if(response.message == "usernotfound"){
-				$(".alert").innerHTML = "Incorrect username";
-			}else if(response.message == "incorrectpass"){
-				$(".alert").innerHTML = "Incorrect password";
-			}
+			recieve(response);
 		}
+	}
+}
+
+function recieve(response){
+	console.log(response.message);
+	switch(response.message){
+		case "logged in":
+			location.href = "userdata.html";
+		break;
+
+		case "usernotfound":
+			$(".alert").innerHTML = "Incorrect username";
+		break;
+
+		case "incorrectpass":
+			$(".alert").innerHTML = "Incorrect password";
+		break;
+
+		default: console.log("out of options:");
 	}
 }
 
@@ -65,21 +78,14 @@ function login(mode, n, p){
 		}
 	};
 	
-	if(n && p && mode == "lin"){console.log("!lout");
-	
-		xhttp.open("POST", "login.php", true);
-		
-		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		xhttp.send("username="+n+"&password="+p);
-		
-	}else if(mode == "start"){console.log("start");
-	
-		xhttp.open("POST", "start.php", true);
-		
-		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		xhttp.send();
-		
+	switch(mode){
+		case "lin":
+			if(n && p){
+				var data = "username="+n+"&password="+p;
+				send(xhttp, "login.php", data);
+			}
+		break;
+
+		case "start": send(xhttp, "start.php", "");
 	}
 }

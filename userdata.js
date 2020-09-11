@@ -82,15 +82,6 @@ function saveData(){
 	send(xhttp, "save.php", data);
 }
 
-function send(xhttp, page, data){
-	xhttp.open("POST", page, true);
-	console.log(page);
-	
-	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	
-	xhttp.send(data);
-}
-
 function recieve(response){
 	console.log(response.message);
 	switch(response.message){
@@ -106,7 +97,7 @@ function recieve(response){
 			location.href = "index.html";
 		break;
 
-		default: "out of options";
+		default: console.log("out of options");
 	}
 }
 

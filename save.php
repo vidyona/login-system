@@ -4,7 +4,7 @@ include("mysqli_config.php");
 if(isset($_POST["userdata"])){
 	$userData = json_decode($_POST["userdata"]);
 }else{
-	echo '{"message": "variables not set"}';
+	die('{"message": "variables not set"}');
 }
 
 if(isset($_COOKIE["token"])){
