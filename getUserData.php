@@ -1,12 +1,13 @@
 <?php
 function getuserdata($conn, $s_userid){
-	$query = "SELECT name, dob, country, favcolor
+	$query = "SELECT userid, name, dob, country, favcolor
 			FROM userdata WHERE userid LIKE '$s_userid'";
 
-	$userdataQ = mysqli_query($conn, $query);
+	$userdataQ = $conn->query($query);
 		
 	if($row = mysqli_fetch_array($userdataQ)){
 		$message = "logged in";
+		$userid = $row["userid"];
 		$name = $row["name"];
 		$dob = $row["dob"];
 		$country = $row["country"];
@@ -20,9 +21,10 @@ function getuserdata($conn, $s_userid){
 		$userData->country = $country;
 		$userData->favcolor = $favcolor;
 
-		return $userData;
-	} else {
-		return $row;
+		if(isset($userid))
+			return $userData;
 	}
+
+	return false;
 }
 ?>

@@ -35,8 +35,6 @@ function validate(){
 }
 
 function responseHandler(responseText){
-	console.log(responseText);
-
 	var list = responseText.split("{");
 
 	for(var item of list){
@@ -51,7 +49,6 @@ function responseHandler(responseText){
 }
 
 function recieve(response){
-	console.log(response.message);
 	switch(response.message){
 		case "logged in":
 			location.href = "userdata.html";
@@ -65,7 +62,7 @@ function recieve(response){
 			$(".alert").innerHTML = "Incorrect password";
 		break;
 
-		default: console.log("out of options:");
+		default: console.log("out of options: " + response.message);
 	}
 }
 

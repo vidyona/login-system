@@ -24,18 +24,13 @@ window.onload = () => {
 }
 
 function responseHandler(responseText){
-	console.log(responseText);
+	var list = "[" + responseText.replace("}", "},") + "]";
 
-	var list = responseText.split("{");
+	var jsonA = JSON.parse(list);
 
-	for(var item of list){
-		if(item != ""){
-			obj = "{" + item;
-
-			var response = JSON.parse(obj);
-			
-			recieve(response);
-		}
+	for(var i of jsonA){
+		console.log(i);
+		recieve(i);
 	}
 }
 
@@ -64,7 +59,7 @@ function login(mode){
 		send(xhttp, "start.php", "");
 		break;
 		
-		default: console.log("invalid option");
+		default: console.log("invalid option: " + mode);
 	}
 }
 
@@ -75,15 +70,13 @@ function saveData(){
 	var favcolor = $(".favcolor").value;
 
 	var userdata = new UserData(name, dob, country, favcolor);
-		
-	//var data = "name="+n+"&dob="+dob+"&country="+c+"&favcolor="+fc;
+	
 	var data = "userdata=" + JSON.stringify(userdata);
 		
 	send(xhttp, "save.php", data);
 }
 
 function recieve(response){
-	console.log(response.message);
 	switch(response.message){
 		case "logged in":
 			userdata(response);
@@ -97,7 +90,7 @@ function recieve(response){
 			location.href = "index.html";
 		break;
 
-		default: console.log("out of options");
+		default: console.log("out of options: " + response.message);
 	}
 }
 

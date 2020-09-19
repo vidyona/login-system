@@ -3,19 +3,29 @@
 include("mysqli_config.php");
 include("classes.php");
 include("getUserData.php");
+include("dbSetup.php");
+include("library.php");
+
+$conn = new mysqli($localhost, $adminUser, $adminPass);
+if ($conn->connect_error) {
+	die("Connection failed: " . $conn->connect_error);
+}
+
+db_setup($conn);
+
+message($conn->error);
 
 if(isset($_COOKIE["token"])){
 	$ctoken = $_COOKIE["token"];
 
-	$conn = mysqli_connect($localhost, $adminUser, $adminPass) or die('{"message":"Couldn\'t connect"}');
+	$query = "SELECT userid, token
+	FROM usertoken
+	WHERE token
+	LIKE '$ctoken'";
 	
-	mysqli_select_db($conn, "login");
-
-	$query = "SELECT userid, token FROM usertoken WHERE token LIKE '$ctoken'";
+	$uid_token = $conn->query($query);
 	
-	$uid_token = mysqli_query($conn, $query);
-	
-	if($row = mysqli_fetch_array($uid_token)){
+	if($uid_token && $row = mysqli_fetch_array($uid_token)){
 		$s_userid = $row["userid"];
 		$s_token = $row["token"];
 	}
@@ -25,13 +35,17 @@ if(isset($_COOKIE["token"])){
 
 		if($userData){
 			echo json_encode($userData);
+		} else {
+			message("log in");
 		}
 	}else{
-		echo '{"message":"log in"}';
+		message("log in");
 	}
 	
-	mysqli_close($conn);
+	
 }else{
-	echo '{"message":"log in"}';
+	message("log in");
 }
+
+$conn->close();
 ?>
