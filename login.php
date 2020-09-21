@@ -10,7 +10,7 @@ include("getUserData.php");
 if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
 	$pass = $_POST["password"];
-}else{echo '{"message": "variables not set"}';}
+}else{echo message("variables not set");}
 
 $conn = mysqli_connect($localhost, $adminUser, $adminPass);
 
@@ -36,10 +36,10 @@ if(isset($s_user) && $user == $s_user){
 		}
 
 	}else if($pass != $s_pass){
-		echo '{"message":"incorrectpass"}';
+		echo message("incorrectpass");
 	}
 }else{
-	echo '{"message":"usernotfound"}';
+	echo message("usernotfound");
 }
 
 mysqli_close($conn);

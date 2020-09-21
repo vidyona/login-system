@@ -5,6 +5,7 @@ include("classes.php");
 include("getUserData.php");
 include("dbSetup.php");
 include("library.php");
+include("dateTime.php");
 
 $conn = new mysqli($localhost, $adminUser, $adminPass);
 if ($conn->connect_error) {
@@ -12,8 +13,6 @@ if ($conn->connect_error) {
 }
 
 db_setup($conn);
-
-message($conn->error);
 
 if(isset($_COOKIE["token"])){
 	$ctoken = $_COOKIE["token"];
@@ -35,11 +34,12 @@ if(isset($_COOKIE["token"])){
 
 		if($userData){
 			echo json_encode($userData);
+			echo dateTime();
 		} else {
-			message("log in");
+			echo message("log in");
 		}
 	}else{
-		message("log in");
+		echo message("log in");
 	}
 	
 	

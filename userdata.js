@@ -23,17 +23,6 @@ window.onload = () => {
 	}
 }
 
-function responseHandler(responseText){
-	var list = "[" + responseText.replace("}", "},") + "]";
-
-	var jsonA = JSON.parse(list);
-
-	for(var i of jsonA){
-		console.log(i);
-		recieve(i);
-	}
-}
-
 function login(mode){
 	xhttp = new XMLHttpRequest();
 	
@@ -47,16 +36,10 @@ function login(mode){
 		case "save": saveData();
 		break;
 		
-		case "lout":
-		console.log("lout");
-		
-		send(xhttp, "logout.php", "");
+		case "lout": send(xhttp, "logout.php");
 		break;
 
-		case "start":
-		console.log("start");
-		
-		send(xhttp, "start.php", "");
+		case "start": send(xhttp, "start.php", "");
 		break;
 		
 		default: console.log("invalid option: " + mode);
@@ -78,16 +61,16 @@ function saveData(){
 
 function recieve(response){
 	switch(response.message){
-		case "logged in":
-			userdata(response);
+		case "logged in": userdata(response);
 		break;
 
-		case "logged out":
-			location.href = "index.html";
+		case "data updated": lastUpdated(response);
 		break;
 
-		case "log in":
-			location.href = "index.html";
+		case "logged out": location.href = "index.html";
+		break;
+
+		case "log in": location.href = "index.html";
 		break;
 
 		default: console.log("out of options: " + response.message);
@@ -100,6 +83,11 @@ function userdata(response){
 	$(".dob").value = dob;
 	$(".country").value = response.country;
 	$(".favcolor").value = response.favcolor;
+}
+
+function lastUpdated(response){
+	$(".lastSaved.date").innerHTML = response.date;
+	$(".lastSaved.time").innerHTML = response.time;
 }
 
 function loggedin(signedup){

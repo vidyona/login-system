@@ -34,20 +34,6 @@ function validate(){
 		
 }
 
-function responseHandler(responseText){
-	var list = responseText.split("{");
-
-	for(var item of list){
-		if(item != ""){
-			obj = "{" + item;
-
-			var response = JSON.parse(obj);
-			
-			recieve(response);
-		}
-	}
-}
-
 function recieve(response){
 	switch(response.message){
 		case "logged in":

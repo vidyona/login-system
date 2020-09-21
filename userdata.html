@@ -17,30 +17,35 @@
         <button class="logout">Log out</button>
     </header>
 
-    <fieldset class="userdata">
-        <legend>User data</legend>
-
-        <div class="forme data">
-            <label>Name: </label>
-            <input class="name" />
+    <div class="userdataC">
+        <fieldset class="userdata">
+            <legend>User data</legend>
+    
+            <div class="forme data">
+                <label>Name: </label>
+                <input class="name" />
+            </div>
+    
+            <div class="forme data">
+                <label>Dob: </label>
+                <input class="dob" type="date"/>
+            </div>
+    
+            <div class="forme data">
+                <label>Country: </label>
+                <input class="country" list="countries"/>
+                <datalist id="countries"></datalist>
+            </div>
+    
+            <div class="forme data">
+                <label>Favourite colour: </label>
+                <input type="color" class="favcolor" value="#000000">
+            </div>
+        </fieldset>
+        <div class="formStatus">
+            <div>Last saved: <span class="lastSaved date"></span> &bull; <span class="lastSaved time"></span></div>
         </div>
-
-        <div class="forme data">
-            <label>Dob: </label>
-            <input class="dob" type="date"/>
-        </div>
-
-        <div class="forme data">
-            <label>Country: </label>
-            <input class="country" list="countries"/>
-            <datalist id="countries"></datalist>
-        </div>
-
-        <div class="forme data">
-            <label>Favourite colour: </label>
-            <input type="color" class="favcolor" value="#000000">
-        </div>
-    </fieldset>
+    </div>
 
     <script src="country_names.js" async></script>
     <script src="main.js" async></script>

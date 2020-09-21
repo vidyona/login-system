@@ -8,27 +8,6 @@ window.onload = function(){
 	});
 }
 
-function responseHandler(responseText){
-	console.log(responseText);
-
-	var list = responseText.split("{");
-
-	for(var item of list){
-		if(item != ""){
-			obj = "{" + item;
-
-			var response = JSON.parse(obj);
-			
-			if(response.message == "userExists"){
-				$(".alert").innerHTML = "Username already exists";
-			}else if(response.message == "signed up"){
-				localStorage.signedup = true;
-				location.href = "userdata.html";
-			}
-		}
-	}
-}
-
 function login(mode, n, p){
 	xhttp = new XMLHttpRequest();
 	
@@ -69,4 +48,19 @@ function signup(){
 	$(".signupb").classList = "signupb hidden";
 	
 	$(".signup").classList = "signup";
+}
+
+function recieve(response){
+	switch(response.message){
+		case "userExists":
+			$(".alert").innerHTML = "Username already exists";
+		break;
+
+		case "signed up":
+			localStorage.signedup = true;
+			location.href = "userdata.html";
+		break;
+
+		default: console.log("out of options: " + response.message);
+	}
 }

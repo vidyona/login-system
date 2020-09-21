@@ -10,3 +10,18 @@ function send(xhttp, page, data){
 	
 	xhttp.send(data);
 }
+
+function responseHandler(responseText){
+	var isjson = responseText.startsWith('{"message":"') && responseText.endsWith('"}');
+	
+	if(isjson){
+		var list = "[" + responseText.replace("}{", "},{") + "]";
+		var jsonA = JSON.parse(list);
+		for(var i of jsonA){
+			recieve(i);
+		}
+	} else {
+		console.log(responseText)
+	}
+	
+}
