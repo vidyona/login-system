@@ -24,7 +24,7 @@ if(isset($_COOKIE["token"])){
 	
 	$uid_token = $conn->query($query);
 	
-	if($uid_token && $row = mysqli_fetch_array($uid_token)){
+	if(isset($uid_token) && $row = mysqli_fetch_array($uid_token)){
 		$s_userid = $row["userid"];
 		$s_token = $row["token"];
 	}
@@ -32,9 +32,14 @@ if(isset($_COOKIE["token"])){
 	if(isset($s_userid) && isset($s_token) && $s_token == $ctoken){
 		$userData = getuserdata($conn, $s_userid);
 
-		if($userData){
-			echo json_encode($userData);
-			echo dateTime();
+		if(isset($userData)){
+			$jsUserData = json_encode($userData);
+			
+			if(isset($jsUserData)){
+				echo $jsUserData;
+			} else {
+				echo message("ud e error");
+			}
 		} else {
 			echo message("log in");
 		}
@@ -44,7 +49,7 @@ if(isset($_COOKIE["token"])){
 	
 	
 }else{
-	message("log in");
+	echo message("log in");
 }
 
 $conn->close();

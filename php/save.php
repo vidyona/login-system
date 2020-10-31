@@ -53,10 +53,6 @@ if(isset($_COOKIE["token"])){
 			WHERE userid LIKE '$d_uid'";
 
 		$updated = $conn->query($query);
-
-		if($updated){
-			echo dateTime();
-		}
 	}
 
 	$conn->close();

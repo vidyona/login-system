@@ -8,38 +8,34 @@ class UserData{
 }
 
 window.onload = () => {
-	login("start");
+	request("start");
 	
 	$aEL($("body"), "input", () => {
-		login("save");
+		request("save");
 	});
 	
 	$aEL($(".logout"), "click", () => {
-		login("lout");
+		request("lout");
 	});
 	
+	countryLister();
+}
+
+function countryLister(){
 	for(var cn of country_list){
 		$("#countries").innerHTML += "<option>"+cn+"</option>";
 	}
 }
 
-function login(mode){
-	xhttp = new XMLHttpRequest();
-	
-	xhttp.onreadystatechange = () => {
-		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
-			responseHandler(xhttp.responseText);
-		}
-	};
-	
+function sender(xhttp, mode){
 	switch(mode){
 		case "save": saveData();
 		break;
 		
-		case "lout": send(xhttp, "logout.php");
+		case "lout": send(xhttp, "php/logout.php", "application/x-www-form-urlencoded");
 		break;
 
-		case "start": send(xhttp, "start.php", "");
+		case "start": send(xhttp, "php/start.php", "application/x-www-form-urlencoded", "");
 		break;
 		
 		default: console.log("invalid option: " + mode);
@@ -56,15 +52,12 @@ function saveData(){
 	
 	var data = "userdata=" + JSON.stringify(userdata);
 		
-	send(xhttp, "save.php", data);
+	send(xhttp, "php/save.php", "application/x-www-form-urlencoded", data);
 }
 
 function recieve(response){
 	switch(response.message){
 		case "logged in": userdata(response);
-		break;
-
-		case "data updated": lastUpdated(response);
 		break;
 
 		case "logged out": location.href = "index.html";
@@ -75,6 +68,8 @@ function recieve(response){
 
 		default: console.log("out of options: " + response.message);
 	}
+	
+	return true;
 }
 
 function userdata(response){
@@ -83,11 +78,18 @@ function userdata(response){
 	$(".dob").value = dob;
 	$(".country").value = response.country;
 	$(".favcolor").value = response.favcolor;
+	var datetime = updateTime(response.datetime);
+	$(".date").innerText = datetime[0];
+	$(".time").innerText = datetime[1];
 }
 
-function lastUpdated(response){
-	$(".lastSaved.date").innerHTML = response.date;
-	$(".lastSaved.time").innerHTML = response.time;
+function updateTime(datetimeString){
+	var datetime = new Date(datetimeString);
+	
+	var date = datetime.getDate() + "-" + datetime.getMonth() + "-" + datetime.getFullYear();
+	var time = datetime.getHours() + ":" + datetime.getMinutes() + ":" + datetime.getSeconds();
+	
+	return [date, time];
 }
 
 function loggedin(signedup){

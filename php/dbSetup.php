@@ -15,7 +15,8 @@ function db_setup($conn){
     name varchar(50) NOT NULL,
     dob date  NOT NULL,
     country varchar(50) NOT NULL,
-    favcolor varchar(50) NOT NULL
+    favcolor varchar(50) NOT NULL,
+	datetime TIMESTAMP(6) on update CURRENT_TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(250)
   );";
 
 if ($conn->query($sql_t_userdata) === FALSE) {

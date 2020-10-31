@@ -6,6 +6,7 @@ include("token.php");
 include("mysqli_config.php");
 include("classes.php");
 include("getUserData.php");
+include("library.php");
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
