@@ -9,7 +9,3 @@ for every refresh, browser code can check for the availability of this token in 
 *Advantage of this approach is that the server doesn't have to keep track of issued token and is able to extract data from token if needed
 
 *This JWT is widely used in authenticating Web applications developed using advanced Javascript frameworks : Angularjs or Reactjs(with supporting libraries)
-
-*******************************************************
-
-make a php file for database setup

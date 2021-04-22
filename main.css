@@ -29,13 +29,10 @@ header{
 	transform: translateY(-50%);
 }
 
-.userdataC{
-	max-width: 500px;
-	margin: 0 auto 40px auto;
-}
-
 fieldset{
 	color: #000;
+	max-width: 500px;
+	margin: 0 auto 40px auto;
 	border: 1px solid #ccc;
 	border-radius: 2px;
 }
@@ -65,16 +62,9 @@ hr{
 	flex: 1;
 	border: 1px solid #ccc;
 	border-radius: 2px;
+	padding: 0 5px;
 }
 
 .forme input:focus{
 	outline: #aaa auto 2px;
-}
-
-.formStatus{
-	text-align: right;
-}
-
-.lastSaved{
-	min-width: 100px;
 }
