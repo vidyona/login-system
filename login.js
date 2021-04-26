@@ -51,9 +51,9 @@ function responseHandler(data, status){
 			switch(response.loginStatus){
 				case "logged in": location.href = "userdata.html";
 				break;
-				case "usernotfound": $("#alert").html("User not found");
+				case "usernotfound": $("#alert").text("User not found");
 				break;
-				case "incorrectpass": $("#alert").html("Incorrect password");
+				case "incorrectpass": $("#alert").text("Incorrect password");
 				break;
 				default: console.log(response.loginStatus);
 			}
