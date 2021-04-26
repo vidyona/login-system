@@ -5,16 +5,17 @@ $(function(){
 	
 	$(".loginButton").click(login);
 	
-	$(".password").focus(() => $(".password").removeAttr("readonly"));
+	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
 	
-	$(".username").on("input", typing);
-	$(".password").on("input", () => $(".password-alert").text(""));
+	$(".username > input").on("input", typing);
+	
+	$(".password > input").on("input", () => $(".password > div").text(""));
 });
 
 function typing(){
-	const usernameAlertDOM = $(".username-alert");
+	const usernameAlertDOM = $(".username > div");
 	
-	var n = $(".username").val();
+	var n = $(".username > input").val();
 	
 	var inValPos = n.search(/[^A-Za-z0-9]/g);
 	
@@ -25,19 +26,19 @@ function typing(){
 }
 
 function login(){
-	var n = $(".username").val();
-	var p = $(".password").val();
+	var n = $(".username > input").val();
+	var p = $(".password > input").val();
 
 	if(n && p){
 		$.post("login.php", "username="+n+"&password="+p, responseHandler);
 	}
 	
 	if(!n){
-		$(".username-alert").text("Please enter a username.");
+		$(".username > div").text("Please enter a username.");
 	}
 	
 	if(!p){
-		$(".password-alert").text("Please enter a password.");
+		$(".password > div").text("Please enter a password.");
 	}
 }
 
@@ -51,9 +52,9 @@ function responseHandler(data, status){
 			switch(response.loginStatus){
 				case "logged in": location.href = "userdata.html";
 				break;
-				case "usernotfound": $("#alert").text("User not found");
+				case "usernotfound": $(".username > div").text("User not found");
 				break;
-				case "incorrectpass": $("#alert").text("Incorrect password");
+				case "incorrectpass": $(".password > div").text("Incorrect password");
 				break;
 				default: console.log(response.loginStatus);
 			}
