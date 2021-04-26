@@ -1,98 +1,64 @@
-function $(e){return document.querySelector(e);}
-function $All(e){return document.querySelectorAll(e);}
-function $aEL(e, eve, f){return e.addEventListener(eve, f);}
-
-window.onload = function(){
-	login("start");
+$(function(){
+	$.post("start.php", "", responseHandler);
 	
-	$(".signupb").addEventListener("click", function(){
-		console.log("signupb clicked");
-		location.href = "signup.html";
-	});
+	$(".signupb").click(() => location.href = "signup.html");
 	
-	$(".lsubmit").addEventListener("click", validate);
+	$(".loginButton").click(login);
 	
-	$(".password").addEventListener("focus", function(){
-		$(".password").removeAttribute("readonly");
-	});
+	$(".password").focus(() => $(".password").removeAttr("readonly"));
 	
-	$aEL($(".login"),"input", typing);
-}
+	$(".username").on("input", typing);
+	$(".password").on("input", () => $(".password-alert").text(""));
+});
 
 function typing(){
-	$(".alert").innerHTML = "";
+	const usernameAlertDOM = $(".username-alert");
 	
-	var n = $(".username").value;
-	var p = $(".password").value;
+	var n = $(".username").val();
 	
 	var inValPos = n.search(/[^A-Za-z0-9]/g);
 	
 	if(inValPos >= 0)
-		$(".alert").innerHTML = "Only A-Z a-z and 0-9 are valid."
+		usernameAlertDOM.text("Only A-Z a-z and 0-9 are valid.");
 	else
-		$(".alert").innerHTML = "";
+		usernameAlertDOM.text("");
 }
 
-function validate(){
-	var n = $(".username").value;
-	var p = $(".password").value;
-	
-	if(n){
-		if(p){
-			
-			login("lin", n, p);
-		}else{
-			$(".alert").innerHTML = "Please enter your password";
-		}
-	}else if(p){
-		$(".alert").innerHTML = "Please enter your username";
-	}else{
-		$(".alert").innerHTML = "Please enter your username and password";
+function login(){
+	var n = $(".username").val();
+	var p = $(".password").val();
+
+	if(n && p){
+		$.post("login.php", "username="+n+"&password="+p, responseHandler);
 	}
-		
+	
+	if(!n){
+		$(".username-alert").text("Please enter a username.");
+	}
+	
+	if(!p){
+		$(".password-alert").text("Please enter a password.");
+	}
 }
 
-function login(mode, n, p){
-	xhttp = new XMLHttpRequest();
+function responseHandler(data, status){
+	console.log(data, status);
 	
-	xhttp.onreadystatechange = function(){
-		if(xhttp.readyState == 4 && xhttp.status == 200 && xhttp.responseText){
-			console.log(xhttp.responseText);
-			try {
-				var response = JSON.parse(extractJSON(xhttp.responseText));
+	try {
+		var response = JSON.parse(extractJSON(data));
 			
-				if(typeof response == "object"){
-					switch(response.loginStatus){
-						case "logged in": location.href = "userdata.html";
-						break;
-						case "usernotfound": $(".alert").innerHTML = "User not found";
-						break;
-						case "incorrectpass": $(".alert").innerHTML = "Incorrect password";
-						break;
-						default: console.log(response.loginStatus);
-					}
-				}
-			} catch (error) {
-				console.log(error);
+		if(typeof response == "object"){
+			switch(response.loginStatus){
+				case "logged in": location.href = "userdata.html";
+				break;
+				case "usernotfound": $("#alert").html("User not found");
+				break;
+				case "incorrectpass": $("#alert").html("Incorrect password");
+				break;
+				default: console.log(response.loginStatus);
 			}
 		}
-	};
-	
-	if(n && p && mode == "lin"){console.log("!lout");
-	
-		xhttp.open("POST", "login.php", true);
-		
-		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		xhttp.send("username="+n+"&password="+p);
-		
-	}else if(mode == "start"){console.log("start");
-	
-		xhttp.open("POST", "start.php", true);
-		
-		xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		
-		xhttp.send();
-		
+	} catch (error) {
+		console.log(error);
 	}
 }

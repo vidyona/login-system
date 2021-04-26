@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8"/>
-<title>Login</title>
-<link rel="stylesheet" href="main.css"/>
+    <meta charset="UTF-8"/>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link rel="stylesheet" href="dependencies/bootstrap/bootstrap.min.css">
+	<script src="dependencies/jquery/jquery.min.js"></script>
+    <script src="dependencies/popper/popper.min.js"></script>
+	<script src="dependencies/bootstrap/bootstrap.min.js"></script>
+
+    <title>Login</title>
+    <link rel="stylesheet" href="main.css"/>
 </head>
 <body>
-<header>
-<p class="alert"></p>
-<button class="signupb">Sign up</button>
-</header>
+    <div class="container-fluid py-3 clearfix">
+        <button class="signupb btn btn-primary float-right">Sign up</button>
+    </div>
 
-<fieldset class="login">
-<legend>Login</legend>
-<div class="forme data">
-<label for="username">Username: </label>
-<input class="username" id="username" autocomplete="on" required placeholder="Enter username"/>
-</div>
-<div class="forme data">
-<label for="password">Password: </label>
-<input class="password" id="password" required type="password" readonly placeholder="Enter password"/>
-</div>
-<div class="forme control">
-<button class="lsubmit">Login</button>
-</div>
-</fieldset>
+    <div class="container login">
+        <legend>Login</legend>
 
-<script src="main.js" async></script>
-<script src="login.js" async></script>
+        <div class="form-group">
+            <label for="username">Username: </label>
+            <input class="username form-control" id="username" autocomplete="off" placeholder="Enter username"/>
+            <div class="username-alert form-alert alert text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password: </label>
+            <input class="password form-control" id="password" type="password" readonly placeholder="Enter password"/>
+            <div class="password-alert form-alert alert text-danger"></div>
+        </div>
+
+        <div class="form-group">
+            <button class="loginButton btn btn-primary">Login</button>
+        </div>
+    </div>
+
+    <script src="main.js" async></script>
+    <script src="login.js" async></script>
 </body>
 </html>
