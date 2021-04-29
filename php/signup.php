@@ -1,8 +1,7 @@
 <?php
 //error_reporting(0);
 
-include_once("utility/setupDB.php");
-include_once("utility/getToken.php");
+require_once "utility.php";
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
@@ -11,11 +10,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
 	die('{"loginStatus": "variables not set"}');
 }
 
-$conn = new mysqli("localhost", "root");
-
-if ($conn->connect_error) {
-	die("Connection failed: " . $conn->connect_error . ", errno: " . $conn->connect_errno);
-}
+$conn = openConnection();
 
 setupDB($conn);
 
@@ -36,8 +31,8 @@ if($conn->query($sql) === TRUE){
 	die($conn->error);
 }
 	
-if($token = getToken($conn)){
-	$sql = "insert into usertoken(userid, token) values('$user', '$token')";
+if($token = generateToken($conn)){
+	$sql = "insert into rememberedLogin(userid, token) values('$user', '$token')";
 
 	if($conn->query($sql) === TRUE){
 		echo "Cookie has been set\n";

@@ -1,14 +1,14 @@
 $(function(){
-	$.post("start.php", "", responseHandler);
+	$.post("php/retrieveUserData.php", "", responseHandler);
 	
-	$(".signupb").click(() => location.href = "signup.html");
+	$(".signUpButton").click(signup);
 	
-	$(".loginButton").click(login);
-	
-	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
+	$(".loginb").click(() => location.href = "index.html");
 	
 	$(".username > input").on("input", typing);
-	
+
+	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
+
 	$(".password > input").on("input", () => $(".password > div").text(""));
 });
 
@@ -25,14 +25,14 @@ function typing(){
 		usernameAlertDOM.text("");
 }
 
-function login(){
+function signup(){
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
-
+		
 	if(n && p){
-		$.post("login.php", "username="+n+"&password="+p, responseHandler);
+		$.post("php/signup.php", "username="+n+"&password="+p, responseHandler);
 	}
-	
+
 	if(!n){
 		$(".username > div").text("Please enter a username.");
 	}
@@ -46,15 +46,15 @@ function responseHandler(data, status){
 	console.log(data, status);
 	
 	try {
-		var response = JSON.parse(extractJSON(data));
+		var response = extractJSON(data);
 			
 		if(typeof response == "object"){
 			switch(response.loginStatus){
 				case "logged in": location.href = "userdata.html";
 				break;
-				case "usernotfound": $(".username > div").text("User not found");
+				case "userExists": $(".username > div").text("Username already exists");
 				break;
-				case "incorrectpass": $(".password > div").text("Incorrect password");
+				case "signed up": location.href = "userdata.html";
 				break;
 				default: console.log(response.loginStatus);
 			}

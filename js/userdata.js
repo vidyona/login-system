@@ -1,9 +1,9 @@
 $(function(){
-	$.post("start.php", "", responseHandler);
+	$.post("php/retrieveUserData.php", "", responseHandler);
 	
 	$(".ssubmit").click(saveData);
 	
-	$(".logout").click(() => $.post("logout.php", "", responseHandler));
+	$(".logout").click(() => $.post("php/logout.php", "", responseHandler));
 	
 	var options = "";
 
@@ -20,7 +20,7 @@ function saveData(){
 	var c = $(".country").val();
 	var fc = $(".favcolor").val();
 
-	$.post("save.php", "name="+n+"&dob="+dob+"&country="+c+"&favcolor="+fc, responseHandler);
+	$.post("php/storeUserData.php", "name="+n+"&dob="+dob+"&country="+c+"&favcolor="+fc, responseHandler);
 }
 
 function userdata(response){
@@ -34,7 +34,7 @@ function responseHandler(data, status){
 	console.log(data, status);
 	
 	try {
-		var response = JSON.parse(extractJSON(data));
+		var response = extractJSON(data);
 			
 		if(typeof response == "object"){
 			switch(response.loginStatus){
@@ -42,9 +42,7 @@ function responseHandler(data, status){
 				break;
 				case "dataUpdated": console.log("dataUpdated");
 				break;
-				case "logged out": location.href = "index.html";
-				break;
-				case "log in": location.href = "index.html";
+				case "not logged in": location.href = "index.php";
 				break;
 				default: console.log(response.loginStatus);
 			}
