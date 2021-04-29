@@ -12,7 +12,7 @@ if(isset($_COOKIE["token"])){
 	die('{"loginStatus": "not logged in"}');
 }
 	
-$sql = "DELETE FROM usertoken WHERE token LIKE '$clientToken'";
+$sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
 $conn->query($sql);
 
 setcookie("token", "", 0, "/");

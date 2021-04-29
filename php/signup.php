@@ -34,13 +34,11 @@ if($conn->query($sql) === TRUE){
 if($token = generateToken($conn)){
 	$sql = "insert into rememberedLogin(userid, token) values('$user', '$token')";
 
-	if($conn->query($sql) === TRUE){
-		echo "Cookie has been set\n";
-	} else {
+	if($conn->query($sql) !== TRUE){
 		die("Error storing token: " . $conn->error);
 	}
 
-	setcookie("token", $token, time() + 3600, "/");
+	setcookie("token", $token, time() + 43200, "/");
 }
 
 $conn->close();
