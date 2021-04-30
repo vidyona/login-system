@@ -38,7 +38,7 @@ if($token = generateToken($conn)){
 		die("Error storing token: " . $conn->error);
 	}
 
-	setcookie("token", $token, time() + 43200, "/");
+	setcookie("token", $token, time() + 3600, "/", "", true, true);
 }
 
 $conn->close();

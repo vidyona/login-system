@@ -38,7 +38,7 @@ if($token = generateToken($conn)){
 	$sql = "insert into rememberedLogin(userid, token) values('$user', '$token')";
 	$conn->query($sql);
 
-	setcookie("token", $token, time() + 3600, "/", false, false);
+	setcookie("token", $token, time() + 3600, "/", "", true, true);
 }else{
 	echo '{"loginStatus":"token exists"}';
 }

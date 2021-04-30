@@ -3,7 +3,7 @@ $(function(){
 	
 	$(".signUpButton").click(signup);
 	
-	$(".loginb").click(() => location.href = "index.html");
+	$(".loginb").click(() => location.href = "login.html");
 	
 	$(".username > input").on("input", typing);
 

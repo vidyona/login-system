@@ -16,11 +16,14 @@
     <link rel="stylesheet" href="main.css"/>
 </head>
 <body>
-    <div class="container-fluid py-3 clearfix">
-        <button class="signupb btn btn-primary float-right">Sign up</button>
-    </div>
+    <header class="container-fluid py-3 px-4 clearfix">
+        <div class="custom-control custom-switch float-right">
+            <input type="checkbox" class="custom-control-input" id="darkMode">
+            <label class="custom-control-label" for="darkMode">Dark mode</label>
+        </div>
+    </header>
 
-    <div class="container login">
+    <div class="container login mt-5">
         <div class="username form-group">
             <label for="username">Username: </label>
             <input class="form-control" id="username" autocomplete="off" placeholder="Enter username"/>
@@ -33,8 +36,12 @@
             <div class="form-alert alert text-danger"></div>
         </div>
 
-        <div class="form-group">
-            <button class="loginButton btn btn-primary">Login</button>
+        <div class="form-group pt-3">
+            <button class="loginButton btn btn-primary btn-block">Login</button>
+        </div>
+
+        <div class="form-group pt-3">
+            <button class="signupb btn btn-primary btn-block">Create new account</button>
         </div>
     </div>
 

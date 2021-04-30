@@ -24,14 +24,16 @@ function saveData(){
 }
 
 function userdata(response){
+	$("#userId").text(response.userId);
 	$(".name").val(response.name);
 	$(".dob").val(response.dob);
 	$(".country").val(response.country);
 	$(".favcolor").val(response.favcolor);
+	$("#lastUpdated").text("Last updated: " + response.lastUpdated);
 }
 
 function responseHandler(data, status){
-	console.log(data, status);
+	console.log("data: " + data + "\n" + status);
 	
 	try {
 		var response = extractJSON(data);
@@ -39,8 +41,6 @@ function responseHandler(data, status){
 		if(typeof response == "object"){
 			switch(response.loginStatus){
 				case "logged in": userdata(response);
-				break;
-				case "dataUpdated": console.log("dataUpdated");
 				break;
 				case "not logged in": location.href = "index.php";
 				break;

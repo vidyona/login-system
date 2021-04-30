@@ -1,3 +1,7 @@
+header > *{
+    margin-right: 10px;
+}
+
 .login, .signup{
     max-width: 400px;
 }
@@ -9,4 +13,16 @@
 .form-alert{
     padding: 0;
     margin: 0;
+}
+
+.darkMode{
+    background-color: #1c1c1c;
+}
+
+.darkMode div, .darkMode button, .darkMode button:hover{
+    color: aliceblue;
+}
+
+.darkMode .dropdown-item{
+    color: black;
 }

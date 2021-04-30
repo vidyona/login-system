@@ -16,9 +16,20 @@
     <link rel="stylesheet" href="main.css"/>
 </head>
 <body>
-    <div class="container-fluid py-3 clearfix">
-        <button class="logout btn btn-primary float-right">Log out</button>
-    </div>
+    <header class="container-fluid clearfix py-2">
+        <div class="dropdown float-right">
+            <button id="userId" class="dropdown-toggle btn" data-toggle="dropdown">menu</button>
+
+            <div class="dropdown-menu dropdown-menu-right">
+                <div class="logout dropdown-item">Log out</div>
+            </div>
+        </div>
+
+        <button class="custom-control custom-switch float-right mx-3 btn">
+            <input type="checkbox" class="custom-control-input" id="darkMode">
+            <label class="custom-control-label" for="darkMode">Dark mode</label>
+        </button>
+    </header>
 
     <div class="container userdata">
         <legend>Personal details</legend>
@@ -45,7 +56,8 @@
         </div>
 
         <div class="forme control">
-            <button class="ssubmit btn btn-primary">Save</button>
+            </span><span id="lastUpdated"></span>
+            <button class="ssubmit btn btn-primary float-right mx-1">Save</button>
         </div>
 
     </div>
