@@ -29,7 +29,7 @@ if(!isset($s_user)){
 }
 
 if(isset($s_pass) && $pass == $s_pass){
-	echo getuserdata($conn, $s_user);
+	echo jsonMessage("logged in");
 } else {
 	die('{"message":"incorrectpass"}');
 }

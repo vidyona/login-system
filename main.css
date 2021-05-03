@@ -16,15 +16,15 @@ header > *{
 }
 
 .darkMode{
-    background-color: #1c1c1c;
+    background-color: #161616;
 }
 
 .darkMode div, .darkMode button{
     color: aliceblue;
 }
 
-.darkMode button:hover{
-    color: unset;
+.darkMode button:hover, .darkMode label:hover{
+    color: aliceblue;
 }
 
 .darkMode .dropdown-menu{
