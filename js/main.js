@@ -1,11 +1,21 @@
 function extractJSON(s){
-    var response = "", jsonText;
+    var responses = [], jsonText, a;
+
+    try {
+        for(let j of s.split("{")){
+            if(!j) continue;
+
+            a = "{" + j;
     
-    if(jsonText = s.slice(s.search('{"'), s.search('"}') + 2)){
-        response = JSON.parse(jsonText);
+            if(jsonText = a.slice(a.search('{"'), a.search('"}') + 2)){
+                responses.push(JSON.parse(jsonText));
+            }
+        }
+    } catch (error) {
+        console.log(error);
     }
 
-    return response;
+    return responses;
 }
 
 $(() => {

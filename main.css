@@ -19,10 +19,18 @@ header > *{
     background-color: #1c1c1c;
 }
 
-.darkMode div, .darkMode button, .darkMode button:hover{
+.darkMode div, .darkMode button{
     color: aliceblue;
 }
 
+.darkMode button:hover{
+    color: unset;
+}
+
+.darkMode .dropdown-menu{
+    background-color: #333333;
+}
+
 .darkMode .dropdown-item{
-    color: black;
+    background-color: inherit;
 }

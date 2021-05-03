@@ -9,7 +9,7 @@ $conn->query("USE $db_name");
 if(isset($_COOKIE["token"])){
 	$clientToken = $_COOKIE["token"];
 } else {
-	die('{"loginStatus": "not logged in"}');
+	die('{"message": "not logged in"}');
 }
 	
 $sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
@@ -17,7 +17,7 @@ $conn->query($sql);
 
 setcookie("token", "", 0, "/");
 	
-echo '{"loginStatus":"not logged in"}';
+echo '{"message":"not logged in"}';
 
 $conn->close();
 ?>

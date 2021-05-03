@@ -45,21 +45,24 @@ function login(){
 function responseHandler(data, status){
 	console.log(data, status);
 	
-	try {
-		var response = extractJSON(data);
-			
-		if(typeof response == "object"){
-			switch(response.loginStatus){
-				case "logged in": location.href = "userdata.html";
-				break;
-				case "usernotfound": $(".username > div").text("User not found");
-				break;
-				case "incorrectpass": $(".password > div").text("Incorrect password");
-				break;
-				default: console.log(response.loginStatus);
-			}
+	var responses = extractJSON(data);
+	
+	for(let response of responses){
+		if(typeof response == "object" && response.message){
+			messageHandler(response.message);
 		}
-	} catch (error) {
-		console.log(error);
+	}
+}
+
+function messageHandler(message){
+	switch (message) {
+		case "logged in": location.href = "userdata.html";
+			break;
+			case "usernotfound": $(".username > div").text("User not found");
+			break;
+			case "incorrectpass": $(".password > div").text("Incorrect password");
+			break;
+		default: console.log(message);
+			break;
 	}
 }

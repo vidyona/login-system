@@ -7,7 +7,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
 	$pass = $_POST["password"];
 }else{
-	die('{"loginStatus": "variables not set"}');
+	die('{"message": "variables not set"}');
 }
 
 $conn = openConnection();
@@ -18,7 +18,7 @@ $sql = "SELECT userid FROM userdata WHERE userid LIKE '$user'";
 $result = $conn->query($sql);
 
 if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
-	die('{"loginStatus": "userExists"}');
+	die('{"message": "userExists"}');
 }
 
 echo "\nuser does not exists\n";
@@ -26,7 +26,7 @@ echo "\nuser does not exists\n";
 $sql = "insert into userdata(userid, password) values('$user', '$pass')";
 
 if($conn->query($sql) === TRUE){
-	echo '{"loginStatus": "signed up"}';
+	echo '{"message": "signed up"}';
 } else {
 	die($conn->error);
 }

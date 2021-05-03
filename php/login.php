@@ -7,7 +7,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
 	$user = $_POST["username"];
 	$pass = $_POST["password"];
 }else{
-	die('{"loginStatus": "variables not set"}');
+	die('{"message": "variables not set"}');
 }
 
 $conn = openConnection();
@@ -25,13 +25,13 @@ if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
 }
 	
 if(!isset($s_user)){
-	die('{"loginStatus":"usernotfound"}');
+	die('{"message":"usernotfound"}');
 }
 
 if(isset($s_pass) && $pass == $s_pass){
 	echo getuserdata($conn, $s_user);
 } else {
-	die('{"loginStatus":"incorrectpass"}');
+	die('{"message":"incorrectpass"}');
 }
 		
 if($token = generateToken($conn)){
@@ -40,7 +40,7 @@ if($token = generateToken($conn)){
 
 	setcookie("token", $token, time() + 3600, "/", "", true, true);
 }else{
-	echo '{"loginStatus":"token exists"}';
+	echo '{"message":"token exists"}';
 }
 
 $conn->close();
