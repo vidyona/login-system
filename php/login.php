@@ -14,21 +14,16 @@ $conn = openConnection();
 
 $conn->query("USE $db_name");
 
+if(!doesUserExists($conn, $user)){
+	die('{"message":"usernotfound"}');
+}
+
 $sql = "SELECT userid, password FROM userdata
-WHERE userid LIKE '$user'";
+WHERE userid LIKE '$user' AND password LIKE '$pass'";
 
 $result = $conn->query($sql);
 
 if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
-	$s_user = $row['userid'];
-	$s_pass = $row['password'];
-}
-	
-if(!isset($s_user)){
-	die('{"message":"usernotfound"}');
-}
-
-if(isset($s_pass) && $pass == $s_pass){
 	echo jsonMessage("logged in");
 } else {
 	die('{"message":"incorrectpass"}');

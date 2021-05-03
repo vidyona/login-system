@@ -98,4 +98,16 @@ function getTokenUser($conn, $clientToken){
 
     return false;
 }
+
+function doesUserExists($conn, $userId){
+    $sql = "SELECT userid FROM userdata WHERE userid LIKE '$userId'";
+
+    $result = $conn->query($sql);
+
+    if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
+	    return true;
+    } else {
+        return false;
+    }
+}
 ?>

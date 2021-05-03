@@ -14,14 +14,11 @@ $conn = openConnection();
 
 setupDB($conn);
 
-$sql = "SELECT userid FROM userdata WHERE userid LIKE '$user'";
-$result = $conn->query($sql);
-
-if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
+if(doesUserExists($conn, $user)){
 	die('{"message": "userExists"}');
 }
 
-echo "\nuser does not exists\n";
+echo '{"message": "user does not exists"}';
 
 $sql = "insert into userdata(userid, password) values('$user', '$pass')";
 
