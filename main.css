@@ -34,3 +34,11 @@ header > *{
 .darkMode .dropdown-item{
     background-color: inherit;
 }
+
+.darkMode .dropdown-item:hover{
+    background-color: #444;
+}
+
+.darkMode .dropdown-divider{
+    border-top-color: #111;
+}

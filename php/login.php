@@ -29,14 +29,7 @@ if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
 	die('{"message":"incorrectpass"}');
 }
 		
-if($token = generateToken($conn)){
-	$sql = "insert into rememberedLogin(userid, token) values('$user', '$token')";
-	$conn->query($sql);
-
-	setcookie("token", $token, time() + 3600, "/", "", true, true);
-}else{
-	echo '{"message":"token exists"}';
-}
+storeUserToken($conn, $user);
 
 $conn->close();
 ?>

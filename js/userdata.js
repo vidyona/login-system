@@ -12,6 +12,12 @@ $(function(){
 	}
 
 	$("#countries").html(options);
+
+	$(".deleteAccount").click(() => {
+		if(confirm("Complete account with each data will be deleted.\nAre you sure?")){
+			$.post("php/deleteUserAccount.php", "", responseHandler);
+		}
+	});
 });
 
 function saveData(){

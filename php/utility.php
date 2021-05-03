@@ -99,6 +99,18 @@ function getTokenUser($conn, $clientToken){
     return false;
 }
 
+function storeUserToken($conn, $userId){
+    if($token = generateToken($conn)){
+        $sql = "insert into rememberedLogin(userid, token) values('$userId', '$token')";
+    
+        if($conn->query($sql) !== TRUE){
+            die("Error storing token: " . $conn->error);
+        }
+    
+        setcookie("token", $token, time() + 3600, "/", "", true, true);
+    }
+}
+
 function doesUserExists($conn, $userId){
     $sql = "SELECT userid FROM userdata WHERE userid LIKE '$userId'";
 
@@ -109,5 +121,10 @@ function doesUserExists($conn, $userId){
     } else {
         return false;
     }
+}
+
+function deleteUserAccount($conn, $userId){
+    $sql = "DELETE FROM userdata WHERE userid LIKE '$userId'";
+    $conn->query($sql);
 }
 ?>

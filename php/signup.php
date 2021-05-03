@@ -28,15 +28,7 @@ if($conn->query($sql) === TRUE){
 	die($conn->error);
 }
 	
-if($token = generateToken($conn)){
-	$sql = "insert into rememberedLogin(userid, token) values('$user', '$token')";
-
-	if($conn->query($sql) !== TRUE){
-		die("Error storing token: " . $conn->error);
-	}
-
-	setcookie("token", $token, time() + 3600, "/", "", true, true);
-}
+storeUserToken($conn, $user);
 
 $conn->close();
 ?>
