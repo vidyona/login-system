@@ -21,7 +21,9 @@ function extractJSON(s){
 $(() => {
     const darkModeSwitch = $("#darkMode")[0];
 
-    darkModeSwitch.checked = JSON.parse(localStorage.darkMode);
+    if(localStorage.darkMode){
+        darkModeSwitch.checked = JSON.parse(localStorage.darkMode);
+    }
     
     darkModeHandler(darkModeSwitch);
     $("#darkMode").change(() => darkModeHandler(darkModeSwitch));
