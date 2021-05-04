@@ -38,6 +38,7 @@ legend{
 }
 
 .btn-primary {
+    color: #404040;
 	background-image: radial-gradient(#7ece87, #66c1c1);
 }
 
@@ -63,10 +64,10 @@ header > *{
 }
 
 .darkMode .form-control{
-    background-color: #fff5e9;
+    background-color: #e8e8e8;
 }
 
-.darkMode .dropdown-item, .darkMode #userId, .darkMode legend, .darkMode label, .darkMode #lastUpdated{
+.darkMode .dropdown-item, .darkMode #userId, .darkMode legend, .darkMode label, .darkMode #lastUpdated, .darkMode .btn-primary{
     color: aliceblue !important;
 }
 
