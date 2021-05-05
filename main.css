@@ -37,9 +37,22 @@ legend{
     color: #444;
 }
 
-.btn-primary {
+.form-control::placeholder:focus {
+	color: #6c757d;
+}
+
+.form-control:focus {
+	border-color: #0d7d97;
+}
+
+.customFormButton {
     color: #404040;
 	background-image: radial-gradient(#7ece87, #66c1c1);
+}
+
+.customFormButton:hover{
+    color: #495734;
+    border-color: #774848;
 }
 
 header > *{
@@ -60,18 +73,22 @@ header > *{
 }
 
 .darkMode{
-    background-image: linear-gradient(35deg, #130e0e, #1f1919, #201919);
+    background-image: linear-gradient(15deg, #772f1a 0%, #f2a65a 74%);
 }
 
 .darkMode .form-control{
     background-color: #e8e8e8;
 }
 
-.darkMode .dropdown-item, .darkMode #userId, .darkMode legend, .darkMode label, .darkMode #lastUpdated, .darkMode .btn-primary{
-    color: aliceblue !important;
+.darkMode .dropdown-item, .darkMode #userId, .darkMode legend, .darkMode label, .darkMode #lastUpdated, .darkMode .customFormButton{
+    color: aliceblue;
 }
 
-.darkMode button:hover, .darkMode label:hover{
+.darkMode .customFormButton:hover{
+    color: #404040 !important;
+}
+
+.darkMode .btn:hover, .darkMode label:hover{
     color: aliceblue;
 }
 
@@ -95,6 +112,6 @@ header > *{
     border-top-color: #111;
 }
 
-.darkMode .btn-primary{
-    background-image: radial-gradient(#40975e, #358686);
+.darkMode .customFormButton{
+    background-image: radial-gradient(#955d51, #9d6c4f);
 }
