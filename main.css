@@ -17,6 +17,14 @@ body{
     top: calc(50% - 6.5px) !important;
 }
 
+.btn:focus{
+    box-shadow: unset;
+}
+
+button, input, optgroup, select, textarea {
+	font-family: consolas;
+}
+
 #userId {
 	font-weight: bold;
 	letter-spacing: 1px;
@@ -80,7 +88,7 @@ header > *{
     background-color: #e8e8e8;
 }
 
-.darkMode .dropdown-item, .darkMode #userId, .darkMode legend, .darkMode label, .darkMode #lastUpdated, .darkMode .customFormButton{
+.darkMode .customFormButton{
     color: aliceblue;
 }
 
@@ -88,16 +96,12 @@ header > *{
     color: #404040 !important;
 }
 
-.darkMode .btn:hover, .darkMode label:hover{
-    color: aliceblue;
-}
-
 .darkMode .custom-control-label::before{
     background-image: radial-gradient(#40975e, #358686);
 }
 
 .darkMode .dropdown-menu{
-    background-color: #333333;
+    background-color: #d7a274;
 }
 
 .darkMode .dropdown-item{
@@ -105,7 +109,7 @@ header > *{
 }
 
 .darkMode .dropdown-item:hover{
-    background-color: #444;
+    background-color: #ffffff2b;
 }
 
 .darkMode .dropdown-divider{
