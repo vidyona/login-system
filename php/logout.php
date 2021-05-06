@@ -6,14 +6,16 @@ $conn = openConnection();
 
 $conn->query("USE $db_name");
 
+session_destroy();
+
 if(isset($_COOKIE["token"])){
 	$clientToken = $_COOKIE["token"];
+
+	$sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
+	$conn->query($sql);
 } else {
 	die('{"message": "not logged in"}');
 }
-	
-$sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
-$conn->query($sql);
 
 setcookie("token", "", 0, "/");
 	

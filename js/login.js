@@ -7,34 +7,39 @@ $(() => {
 	
 	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
 	
-	$(".username > input").on("input", typing);
+	$(".username > input").on("input", validate);
 	
 	$(".password > input").on("input", () => $(".password > div").text(""));
 });
 
-function typing(){
+function validate(){
 	const usernameAlertDOM = $(".username > div");
 	
 	var n = $(".username > input").val();
 	
 	var inValPos = n.search(/[^A-Za-z0-9]/g);
 	
-	if(inValPos >= 0)
+	if(inValPos >= 0){
 		usernameAlertDOM.text("Only A-Z a-z and 0-9 are valid.");
-	else
+		return false;
+	} else {
 		usernameAlertDOM.text("");
+		return true;
+	}
 }
 
 function login(){
+	const usernameAlertDOM = $(".username > div");
+
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
 
-	if(n && p){
+	if(n && p && validate()){
 		$.post("php/login.php", "username="+n+"&password="+p, responseHandler);
 	}
 	
 	if(!n){
-		$(".username > div").text("Please enter a username.");
+		usernameAlertDOM.text("Please enter a username.");
 	}
 	
 	if(!p){

@@ -1,4 +1,5 @@
 <?php
+session_start();
 $db_name = "login";
 
 function openConnection(){
@@ -55,12 +56,17 @@ function jsonMessage($message){
     return json_encode(array('message'=>$message));
 }
 
-function getuserdata($conn, $s_user){
-	$sql = "SELECT userid, name, dob, country, favcolor, last_updated FROM userdata WHERE userid LIKE '$s_user'";
+function getuserdata($conn, $userId){
+    if(isset($_SESSION['userid'])){
+        $userId = $_SESSION['userid'];
+    }
+
+	$sql = "SELECT userid, name, dob, country, favcolor, last_updated FROM userdata WHERE userid LIKE '$userId'";
 	$result = $conn->query($sql);
 		
 	if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
         echo jsonMessage("logged in") . json_encode($row);
+        echo "here";
 	} else {
         return false;
     }
@@ -83,16 +89,17 @@ function generateToken($conn){
 	}
 }
 
-function getTokenUser($conn, $clientToken){
+function getTokenUser($conn){
+    $clientToken = $_COOKIE["token"];
     $sql = "SELECT userid FROM rememberedLogin
     WHERE token LIKE '$clientToken'";
 	
     $result = $conn->query($sql);
 	
-    if($result && $result->num_rows > 0
-    && $row = $result->fetch_assoc()){
-        if($s_userid = $row["userid"]){
-            return $s_userid;
+    if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
+        echo "php-util-98";
+        if($userId = $row["userid"]){
+            return $userId;
         }
     }
 

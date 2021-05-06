@@ -21,7 +21,7 @@ body{
     box-shadow: unset;
 }
 
-button, input, optgroup, select, textarea {
+#userId, #lastUpdated, legend, input, optgroup, select, textarea {
 	font-family: consolas;
 }
 

@@ -24,6 +24,7 @@ WHERE userid LIKE '$user' AND password LIKE '$pass'";
 $result = $conn->query($sql);
 
 if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
+	$_SESSION['userid'] = $row['userid'];
 	echo jsonMessage("logged in");
 } else {
 	die('{"message":"incorrectpass"}');

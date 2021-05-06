@@ -1,6 +1,5 @@
 <?php
 //error_reporting(0);
-
 require_once "utility.php";
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
@@ -24,6 +23,7 @@ $sql = "insert into userdata(userid, password) values('$user', '$pass')";
 
 if($conn->query($sql) === TRUE){
 	echo '{"message": "signed up"}';
+	$_SESSION['userid'] = $userId;
 } else {
 	die($conn->error);
 }
