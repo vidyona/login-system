@@ -11,15 +11,12 @@ session_destroy();
 if(isset($_COOKIE["token"])){
 	$clientToken = $_COOKIE["token"];
 
-	$sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
-	$conn->query($sql);
+	logOut($conn, $clientToken);
+
+	echo '{"message":"not logged in"}';
 } else {
 	die('{"message": "not logged in"}');
 }
-
-setcookie("token", "", 0, "/");
-	
-echo '{"message":"not logged in"}';
 
 $conn->close();
 ?>

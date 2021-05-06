@@ -130,6 +130,14 @@ function doesUserExists($conn, $userId){
     }
 }
 
+function logOut($conn, $clientToken){
+    $sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
+	$conn->query($sql);
+
+	session_destroy();
+	setcookie("token", "", 0, "/");
+}
+
 function deleteUserAccount($conn, $userId){
     $sql = "DELETE FROM userdata WHERE userid LIKE '$userId'";
     $conn->query($sql);

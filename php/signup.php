@@ -3,7 +3,7 @@
 require_once "utility.php";
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
-	$user = $_POST["username"];
+	$userId = $_POST["username"];
 	$pass = $_POST["password"];
 }else{
 	die('{"message": "variables not set"}');
@@ -13,13 +13,13 @@ $conn = openConnection();
 
 setupDB($conn);
 
-if(doesUserExists($conn, $user)){
+if(doesUserExists($conn, $userId)){
 	die('{"message": "userExists"}');
 }
 
 echo '{"message": "user does not exists"}';
 
-$sql = "insert into userdata(userid, password) values('$user', '$pass')";
+$sql = "insert into userdata(userid, password) values('$userId', '$pass')";
 
 if($conn->query($sql) === TRUE){
 	echo '{"message": "signed up"}';
@@ -28,7 +28,7 @@ if($conn->query($sql) === TRUE){
 	die($conn->error);
 }
 	
-storeUserToken($conn, $user);
+storeUserToken($conn, $userId);
 
 $conn->close();
 ?>

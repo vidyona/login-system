@@ -16,16 +16,13 @@ $userId = getTokenUser($conn, $clientToken);
 
 if(isset($userId)){
     echo deleteUserAccount($conn, $userId);
+
+    logOut($conn, $clientToken);
+
+    echo '{"message":"not logged in"}';
 }else {
     die('{"message":"not logged in"}');
 }
-	
-$sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
-$conn->query($sql);
-
-setcookie("token", "", 0, "/");
-	
-echo '{"message":"not logged in"}';
 
 $conn->close();
 ?>
