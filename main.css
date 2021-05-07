@@ -96,8 +96,9 @@ header > *{
     color: #404040 !important;
 }
 
-.darkMode .custom-control-label::before{
-    background-image: radial-gradient(#40975e, #358686);
+.darkMode .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #865b35;
+    border-color: #8c3f10;
 }
 
 .darkMode .dropdown-menu{

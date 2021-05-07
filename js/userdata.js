@@ -44,17 +44,17 @@ function userdata(response){
 				break;
 			case "last_updated" : $("#lastUpdated").text("Last updated: " + response.last_updated);
 				break;
-			default: console.log(response.message);
+			default: console.log(response);
 				break;
 		}
 	}
 }
 
-function messageHandler(message){
-	switch (message) {
+function messageHandler(response){
+	switch (response.message) {
 		case "not logged in": location.href = "index.php";
 			break;
-		default: console.log(message);
+		default: console.log(response);
 			break;
 	}
 }
@@ -66,7 +66,7 @@ function responseHandler(data, status){
 		
 	for(let response of responses){
 		if(typeof response == "object" && response.message){
-			messageHandler(response.message);
+			messageHandler(response);
 		} else{
 			userdata(response);
 		}

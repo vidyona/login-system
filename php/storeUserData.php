@@ -10,13 +10,13 @@ if(isset($_POST["name"])
 	$country = $_POST["country"];
 	$favcolor = $_POST["favcolor"];
 }else{
-	echo '{"message": "variables not set"}';
+	echo jsonMessage("variables not set");
 }
 
 if(isset($_COOKIE["token"])){
 	$clientToken = $_COOKIE["token"];
 } else {
-	die('{"message": "not logged in"}');
+	die(jsonMessage("not logged in"));
 }
 
 $conn = openConnection();
@@ -28,18 +28,18 @@ $userId = getTokenUser($conn, $clientToken);
 $sql = "UPDATE userdata SET name = '$name', country = '$country', favcolor = '$favcolor' WHERE userid LIKE '$userId'";
 
 if($conn->query($sql) === TRUE){
-	echo '{"message": "dataUpdated"}';
+	echo jsonMessage("dataUpdated");
 } else {
-	echo "Error updating data: " . $conn->error;
+	echo jsonMessage("Error updating data: " . $conn->error);
 }
 
 if($dob == ""){
 	if($conn->query("UPDATE userdata SET dob = NULL WHERE userid LIKE '$userId'") !== TRUE){
-		echo $conn->error;
+		echo jsonMessage($conn->error);
 	}
 } else {
 	if($conn->query("UPDATE userdata SET dob = '$dob' WHERE userid LIKE '$userId'") !== TRUE){
-		echo $conn->error;
+		echo jsonMessage($conn->error);
 	}
 }
 

@@ -3,19 +3,16 @@
 require_once "utility.php";
 
 $conn = openConnection();
-
-$conn->query("USE $db_name");
+setupDB($conn);
 
 session_destroy();
 
 if(isset($_COOKIE["token"])){
-	$clientToken = $_COOKIE["token"];
+	forgetLogin($conn, $_COOKIE["token"]);
 
-	logOut($conn, $clientToken);
-
-	echo '{"message":"not logged in"}';
+	echo jsonMessage("not logged in");
 } else {
-	die('{"message": "not logged in"}');
+	die(jsonMessage("not logged in"));
 }
 
 $conn->close();

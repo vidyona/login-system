@@ -7,7 +7,7 @@ function extractJSON(s){
 
             a = "{" + j;
     
-            if(jsonText = a.slice(a.search('{"'), a.search('"}') + 2)){
+            if(jsonText = a.slice(a.search('{"'), a.search('}') + 2)){
                 responses.push(JSON.parse(jsonText));
             }
         }

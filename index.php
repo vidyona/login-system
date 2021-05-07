@@ -1,6 +1,5 @@
 <?php
 //error_reporting(0);
-session_start();
 
 require_once "php/utility.php";
 
@@ -10,7 +9,8 @@ setupDB($conn);
 if(isset($_SESSION['userid'])){
     header("Location: /userdata.html");
     exit;
-} else if(isset($_COOKIE["token"]) && $s_userId = getTokenUser($conn)){
+} else if(isset($_COOKIE["token"]) && $userId = getTokenUser($conn)){
+	$_SESSION['userid'] = $userId;
     header("Location: /userdata.html");
     exit;
 } else {

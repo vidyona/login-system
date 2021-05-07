@@ -1,28 +1,47 @@
 <?php
 session_start();
-$db_name = "login";
 
 function openConnection(){
-    $host = "localhost";
-    $user = "root";
-    $pass = "password";
+    define("host", "localhost");
+    define("user", "root");
+    define("pass", "password");
 
-    $conn = new mysqli($host, $user, $pass);
+    $conn = new mysqli(host, user, pass);
 
     if($conn->connect_error){
-	    die("Connection failed: " . $conn->connect_error . ", errno: " . $conn->connect_errno);
+        die(json_encode(array(
+            'message'=>'Connection failed',
+            'connect_error'=>$conn->connect_error,
+            'connect_errno'=>$conn->connect_errno
+        )));
     }
 
     return $conn;
 }
 
 function setupDB($conn){
-    $sql = "CREATE DATABASE IF NOT EXISTS login";
+    $db_name = "login";
 
+    $sql = "CREATE DATABASE IF NOT EXISTS $db_name";
+    
     if($conn->query($sql) === TRUE){
-        $conn->query("USE login");
+        if($conn->query("USE $db_name") !== TRUE){
+            if($conn->error){
+                die(json_encode(array(
+                    'message'=>'Error selecting database',
+                    'error'=>$conn->error,
+                    'errno'=>$conn->errno
+                )));
+            }
+        }
     } else {
-        die("Error creating database: " . $conn->error);
+        if($conn->error){
+            die(json_encode(array(
+                'message'=>'Error creating database',
+                'error'=>$conn->error,
+                'errno'=>$conn->errno
+            )));
+        }
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS userdata(
@@ -37,7 +56,13 @@ function setupDB($conn){
     )";
 
     if($conn->query($sql) !== TRUE){
-        die("Error creating table: " . $conn->error);
+        if($conn->error){
+            die(json_encode(array(
+                'message'=>'Error creating table',
+                'error'=>$conn->error,
+                'errno'=>$conn->errno
+            )));
+        }
     }
 
     $sql = "CREATE TABLE IF NOT EXISTS rememberedLogin(
@@ -48,7 +73,13 @@ function setupDB($conn){
     )";
 
     if($conn->query($sql) !== TRUE){
-        echo "Error creating table: " . $conn->error;
+        if($conn->error){
+            die(json_encode(array(
+                'message'=>'Error creating table',
+                'error'=>$conn->error,
+                'errno'=>$conn->errorno
+            )));
+        }
     }
 }
 
@@ -57,16 +88,12 @@ function jsonMessage($message){
 }
 
 function getuserdata($conn, $userId){
-    if(isset($_SESSION['userid'])){
-        $userId = $_SESSION['userid'];
-    }
-
-	$sql = "SELECT userid, name, dob, country, favcolor, last_updated FROM userdata WHERE userid LIKE '$userId'";
+    $sql = "SELECT userid, name, dob, country, favcolor, last_updated
+    FROM userdata WHERE userid LIKE '$userId'";
 	$result = $conn->query($sql);
 		
 	if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
         echo jsonMessage("logged in") . json_encode($row);
-        echo "here";
 	} else {
         return false;
     }
@@ -97,7 +124,6 @@ function getTokenUser($conn){
     $result = $conn->query($sql);
 	
     if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
-        echo "php-util-98";
         if($userId = $row["userid"]){
             return $userId;
         }
@@ -106,12 +132,12 @@ function getTokenUser($conn){
     return false;
 }
 
-function storeUserToken($conn, $userId){
+function rememberLogin($conn, $userId){
     if($token = generateToken($conn)){
         $sql = "insert into rememberedLogin(userid, token) values('$userId', '$token')";
     
         if($conn->query($sql) !== TRUE){
-            die("Error storing token: " . $conn->error);
+            die(jsonMessage("Error storing token: " . $conn->error));
         }
     
         setcookie("token", $token, time() + 3600, "/", "", true, true);
@@ -120,8 +146,15 @@ function storeUserToken($conn, $userId){
 
 function doesUserExists($conn, $userId){
     $sql = "SELECT userid FROM userdata WHERE userid LIKE '$userId'";
-
     $result = $conn->query($sql);
+
+    if($conn->error){
+        echo json_encode(array(
+            'message'=>'Error finding user',
+            'error'=>$conn->error,
+            'errno'=>$conn->errno
+        ));
+    }
 
     if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
 	    return true;
@@ -130,16 +163,17 @@ function doesUserExists($conn, $userId){
     }
 }
 
-function logOut($conn, $clientToken){
+function forgetLogin($conn, $clientToken){
     $sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
-	$conn->query($sql);
+    $success = $conn->query($sql);
 
-	session_destroy();
 	setcookie("token", "", 0, "/");
+
+    return $success;
 }
 
 function deleteUserAccount($conn, $userId){
     $sql = "DELETE FROM userdata WHERE userid LIKE '$userId'";
-    $conn->query($sql);
+    return $conn->query($sql);
 }
 ?>

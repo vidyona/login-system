@@ -10,8 +10,8 @@ if(isset($_SESSION['userid'])){
     echo getuserdata($conn, $_SESSION['userid']);
 } else if(isset($_COOKIE["token"]) && $userId = getTokenUser($conn)){
     echo "\ncookie\n";
-    echo getuserdata($conn, $userId);
     $_SESSION['userid'] = $userId;
+    echo getuserdata($conn, $userId);
 } else {
 	die('{"message": "not logged in"}');
 }

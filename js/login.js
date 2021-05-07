@@ -33,9 +33,12 @@ function login(){
 
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
+	var rL = $("#rememberLogin")[0].checked;
 
 	if(n && p && validate()){
-		$.post("php/login.php", "username="+n+"&password="+p, responseHandler);
+		$.post("php/login.php",
+			"username=" + n + "&password=" + p + "&rememberLogin=" + rL,
+			responseHandler);
 	}
 	
 	if(!n){
@@ -54,20 +57,20 @@ function responseHandler(data, status){
 	
 	for(let response of responses){
 		if(typeof response == "object" && response.message){
-			messageHandler(response.message);
+			messageHandler(response);
 		}
 	}
 }
 
-function messageHandler(message){
-	switch (message) {
+function messageHandler(response){
+	switch (response.message) {
 		case "logged in": location.href = "userdata.html";
 			break;
 			case "usernotfound": $(".username > div").text("User not found");
 			break;
 			case "incorrectpass": $(".password > div").text("Incorrect password");
 			break;
-		default: console.log(message);
+		default: console.log(response);
 			break;
 	}
 }
