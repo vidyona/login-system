@@ -10,20 +10,21 @@ if(isset($_POST["name"])
 	$country = $_POST["country"];
 	$favcolor = $_POST["favcolor"];
 }else{
-	echo jsonMessage("variables not set");
-}
-
-if(isset($_COOKIE["token"])){
-	$clientToken = $_COOKIE["token"];
-} else {
-	die(jsonMessage("not logged in"));
+	die(jsonMessage("variables not set"));
 }
 
 $conn = openConnection();
+setupDB($conn);
 
-$conn->query("USE login");
-	
-$userId = getTokenUser($conn, $clientToken);
+if(isset($_COOKIE["token"]) && $userId = getTokenUser($conn)){
+	$_SESSION['userid'] = $userId;
+}
+
+if(!isset($_SESSION['userid'])){
+    die(jsonMessage("not logged in"));
+}
+
+$userId = $_SESSION['userid'];
 
 $sql = "UPDATE userdata SET name = '$name', country = '$country', favcolor = '$favcolor' WHERE userid LIKE '$userId'";
 

@@ -28,12 +28,11 @@ $(() => {
     darkModeHandler(darkModeSwitch);
     $("#darkMode").change(() => darkModeHandler(darkModeSwitch));
 
-    $("#customForm input").last().focus(() => {
-        $("input").last().keypress((event) => {
-            if(event.which == 13){
-                $("#submitButton").click();
-            }
-        });
+    
+    $("#customForm input[type='password']").last().keypress((event) => {
+        if(event.which == 13){
+            $("#submitButton").click();
+        }
     });
 });
 

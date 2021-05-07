@@ -62,13 +62,15 @@ function messageHandler(response){
 function responseHandler(data, status){
 	console.log("data: " + data + "\n" + status);
 	
-	var responses = extractJSON(data);
+	var responses = extractJSON(data);console.log(responses);
 		
 	for(let response of responses){
-		if(typeof response == "object" && response.message){
-			messageHandler(response);
-		} else{
-			userdata(response);
+		if(typeof response == "object"){
+			if(response.message){
+				messageHandler(response);
+			} else {
+				userdata(response);
+			}
 		}
 	}
 }

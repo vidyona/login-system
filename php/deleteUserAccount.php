@@ -3,25 +3,23 @@
 require_once "utility.php";
 
 $conn = openConnection();
-setupDB();
+setupDB($conn);
 
-if(isset($_COOKIE["token"])){
-	$clientToken = $_COOKIE["token"];
-
-	$userId = getTokenUser($conn, $clientToken);
-} else {
-	die(jsonMessage("not logged in"));
+if(isset($_COOKIE["token"]) && $userId = getTokenUser($conn)){
+	$_SESSION['userid'] = $userId;
+	forgetLogin($conn, $_COOKIE["token"]);
 }
 
-if(isset($userId)){
-    echo deleteUserAccount($conn, $userId);
-
-    forgetLogin($conn, $clientToken);
-
-    echo jsonMessage("not logged in");
-}else {
+if(!isset($_SESSION['userid'])){
     die(jsonMessage("not logged in"));
 }
+
+if(deleteUserAccount($conn, $_SESSION['userid'])){
+    echo jsonMessage("account_deleted");
+}
+
+session_destroy();
+echo jsonMessage("not logged in");
 
 $conn->close();
 ?>

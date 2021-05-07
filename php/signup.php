@@ -23,13 +23,14 @@ $sql = "insert into userdata(userid, password) values('$userId', '$pass')";
 if($conn->query($sql) === TRUE){
 	$_SESSION['userid'] = $userId;
 
+	if(!isset($_POST["rememberLogin"]) || $_POST["rememberLogin"] === "true"){
+		rememberLogin($conn, $userId);
+	}
+
 	echo jsonMessage("signed up");
 } else {
 	die($conn->error);
 }
-
-//remember login
-rememberLogin($conn, $userId);
 
 $conn->close();
 ?>

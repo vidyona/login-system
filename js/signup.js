@@ -5,32 +5,38 @@ $(function(){
 	
 	$(".loginb").click(() => location.href = "login.html");
 	
-	$(".username > input").on("input", typing);
+	$(".username > input").on("input", validate);
 
 	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
 
 	$(".password > input").on("input", () => $(".password > div").text(""));
 });
 
-function typing(){
+function validate(){
 	const usernameAlertDOM = $(".username > div");
 	
 	var n = $(".username > input").val();
 	
 	var inValPos = n.search(/[^A-Za-z0-9]/g);
 	
-	if(inValPos >= 0)
+	if(inValPos >= 0){
 		usernameAlertDOM.text("Only A-Z a-z and 0-9 are valid.");
-	else
+		return false;
+	} else {
 		usernameAlertDOM.text("");
+		return true;
+	}
 }
 
 function signup(){
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
+	var rL = $("#rememberLogin")[0].checked;
 		
-	if(n && p){
-		$.post("php/signup.php", "username="+n+"&password="+p, responseHandler);
+	if(n && p && validate()){
+		$.post("php/signup.php",
+			"username=" + n + "&password=" + p + "&rememberLogin=" + rL,
+			responseHandler);
 	}
 
 	if(!n){
