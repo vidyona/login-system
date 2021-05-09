@@ -17,10 +17,10 @@ function validate(){
 	
 	var n = $(".username > input").val();
 	
-	var inValPos = n.search(/[^A-Za-z0-9]/g);
+	var inValPos = n.search(/[^a-zA-Z0-9-_.]/g);
 	
 	if(inValPos >= 0){
-		usernameAlertDOM.text("Only A-Z a-z and 0-9 are valid.");
+		usernameAlertDOM.text("Only a-z A-Z 0-9 '-' '_' and '.' are allowed");
 		return false;
 	} else {
 		usernameAlertDOM.text("");
@@ -51,7 +51,7 @@ function login(){
 }
 
 function responseHandler(data, status){
-	console.log(data, status);
+	console.log({status: status, data: data});
 	
 	var responses = extractJSON(data);
 	

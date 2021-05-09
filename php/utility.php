@@ -162,6 +162,7 @@ function rememberLogin($conn, $userId){
 
 function doesUserExists($conn, $userId){
     $sql = "SELECT userid FROM userdata WHERE userid LIKE '$userId'";
+    
     $result = $conn->query($sql);
 
     if($conn->error){
@@ -191,5 +192,17 @@ function forgetLogin($conn, $clientToken){
 function deleteUserAccount($conn, $userId){
     $sql = "DELETE FROM userdata WHERE userid LIKE '$userId'";
     return $conn->query($sql);
+}
+
+function validateUserInput($input){
+    $input = trim($input);
+    $input = stripcslashes($input);
+    $input = htmlspecialchars($input);
+
+    if (!preg_match("/^[a-zA-Z0-9-_.]*$/",$input)) {
+        die(jsonMessage("Only a-z A-Z 0-9 '-' '_' and '.' are allowed"));
+    }
+
+    return $input;
 }
 ?>
