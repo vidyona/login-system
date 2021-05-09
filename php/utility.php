@@ -1,4 +1,13 @@
 <?php
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => null,
+    'secure' => true,
+    'httponly' => true,
+    'samesite' => 'Strict'
+]);
 session_start();
 
 function openConnection(){
@@ -100,7 +109,7 @@ function getuserdata($conn, $userId){
 }
 
 function generateToken($conn){
-	$token = bin2hex(random_bytes(64));
+	$token = bin2hex(random_bytes(16));
 	
 	$sql = "SELECT token FROM usertoken WHERE token LIKE '$token'";
 	$result = $conn->query($sql);
@@ -140,7 +149,14 @@ function rememberLogin($conn, $userId){
             die(jsonMessage("Error storing token: " . $conn->error));
         }
     
-        setcookie("token", $token, time() + 3600, "/", "", true, true);
+        setcookie("token", $token, [
+            'expires' => time() + 86400,
+            'path' => '/',
+            'domain' => null,
+            'secure' => true,
+            'httponly' => true,
+            'samesite' => 'Strict'
+        ]);
     }
 }
 
