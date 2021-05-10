@@ -68,18 +68,10 @@ foreach ($userdata as $key => $value) {
 	$stmt->bind_param("ss", $value, $userId);
 
 	if($stmt->execute()){
-		echo jsonMessage("dataUpdated");
+		echo jsonMessage("updated " . $key);
 	} else {
-		echo jsonMessage("Error updating data: " . $stmt->error);
+		echo jsonMessage("Error updating " . $key . ": " . $stmt->error);
 	}
-
-	// $sql = "UPDATE userdata SET $key = '$value' WHERE userid LIKE '$userId'";
-
-	// if($conn->query($sql) === TRUE){
-	// 	echo jsonMessage("dataUpdated");
-	// } else {
-	// 	echo jsonMessage("Error updating data: " . $conn->error);
-	// }
 }
 
 $conn->close();
