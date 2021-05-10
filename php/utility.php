@@ -199,10 +199,12 @@ function validateUserInput($input){
     $input = stripcslashes($input);
     $input = htmlspecialchars($input);
 
+    return $input;
+}
+
+function validateIdPass($input){
     if (!preg_match("/^[a-zA-Z0-9-_. ]*$/",$input)) {
         die(jsonMessage("Only a-z A-Z 0-9 '-' '_' and '.' are allowed"));
     }
-
-    return $input;
 }
 ?>

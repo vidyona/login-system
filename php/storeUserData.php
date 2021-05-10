@@ -1,6 +1,18 @@
 <?php
 require_once "utility.php";
 
+function validateName($name){
+	if(isset($name)){
+		$name = validateUserInput($name);
+
+		if (preg_match("/^[a-zA-Z0-9- ]*$/",$name)) {
+        	return $name;
+    	}
+	}
+
+	return false;
+}
+
 function validateDate($date){
 	if(isset($date)){
 		$d = DateTime::createFromFormat("Y-m-d", $date);
@@ -13,16 +25,18 @@ function validateDate($date){
 	return false;
 }
 
-if(isset($_POST["name"])
-&& isset($_POST["country"])
-&& isset($_POST["favcolor"])){
-	$name = validateUserInput($_POST["name"]);
-	$dob = validateDate($_POST["dob"]);
-	$country = validateUserInput($_POST["country"]);
-	$favcolor = $_POST["favcolor"];
-}else{
-	die(jsonMessage("variables not set"));
+function validateCountry($country){
+	if(isset($country)){
+		return validateUserInput($country);
+	}
+	
+	return false;
 }
+
+$name = validateName($_POST["name"]);
+$dob = validateDate($_POST["dob"]);
+$country = validateUserInput($_POST["country"]);
+$favcolor = $_POST["favcolor"];
 
 $conn = openConnection();
 setupDB($conn);
@@ -37,18 +51,35 @@ if(!isset($_SESSION['userid'])){
 
 $userId = $_SESSION['userid'];
 
-$sql = "UPDATE userdata SET name = '$name', country = '$country', favcolor = '$favcolor' WHERE userid LIKE '$userId'";
+$userdata = array(
+	'name' => $name,
+	'dob' => $dob,
+	'country' => $country,
+	'favcolor' => $favcolor
+);
 
-if($conn->query($sql) === TRUE){
-	echo jsonMessage("dataUpdated");
-} else {
-	echo jsonMessage("Error updating data: " . $conn->error);
-}
-
-if($dob){
-	if($conn->query("UPDATE userdata SET dob = '$dob' WHERE userid LIKE '$userId'") !== TRUE){
-		echo jsonMessage($conn->error);
+foreach ($userdata as $key => $value) {
+	if(!$value){
+		echo jsonMessage("skipping '$key'");
+		continue;
 	}
+
+	$stmt = $conn->prepare("UPDATE userdata SET $key = ? WHERE userid LIKE ?");
+	$stmt->bind_param("ss", $value, $userId);
+
+	if($stmt->execute()){
+		echo jsonMessage("dataUpdated");
+	} else {
+		echo jsonMessage("Error updating data: " . $stmt->error);
+	}
+
+	// $sql = "UPDATE userdata SET $key = '$value' WHERE userid LIKE '$userId'";
+
+	// if($conn->query($sql) === TRUE){
+	// 	echo jsonMessage("dataUpdated");
+	// } else {
+	// 	echo jsonMessage("Error updating data: " . $conn->error);
+	// }
 }
 
 $conn->close();

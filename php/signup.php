@@ -3,8 +3,8 @@
 require_once "utility.php";
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
-	$userId = $_POST["username"];
-	$pass = $_POST["password"];
+	$userId = validateIdPass(validateUserInput($_POST["username"]));
+	$pass = validateIdPass(validateUserInput($_POST["password"]));
 }else{
 	die(jsonMessage("variables not set"));
 }
