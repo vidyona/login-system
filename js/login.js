@@ -11,8 +11,6 @@ $(() => {
 });
 
 function login(){
-	const usernameAlertDOM = $(".username > div");
-
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
 	var rL = $("#rememberLogin")[0].checked;
@@ -24,7 +22,7 @@ function login(){
 	}
 	
 	if(!n){
-		usernameAlertDOM.text("Please enter a username.");
+		$(".username > div").text("Please enter a username.");
 	}
 	
 	if(!p){

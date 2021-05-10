@@ -29,27 +29,6 @@ function saveData(){
 	$.post("php/storeUserData.php", "name="+n+"&dob="+dob+"&country="+c+"&favcolor="+fc, responseHandler);
 }
 
-function userdata(response){
-	for(let i in response){
-		switch (i) {
-			case "userid" : $("#userId").text(response.userid);
-				break;
-			case "name" : $(".name").val(response.name);
-				break;
-			case "dob" : $(".dob").val(response.dob);
-				break;
-			case "country" : $(".country").val(response.country);
-				break;
-			case "favcolor" : $(".favcolor").val(response.favcolor);
-				break;
-			case "last_updated" : $("#lastUpdated").text("Last updated: " + response.last_updated);
-				break;
-			default: console.log(response);
-				break;
-		}
-	}
-}
-
 function messageHandler(response){
 	switch (response.message) {
 		case "not logged in": location.href = "index.php";
@@ -66,11 +45,30 @@ function responseHandler(data, status){
 		
 	for(let response of responses){
 		if(typeof response == "object"){
-			if(response.message){
-				messageHandler(response);
-			} else {
-				userdata(response);
-			}
+			responseObjectHandler(response);
+		}
+	}
+}
+
+function responseObjectHandler(response){
+	for(let i in response){
+		switch (i) {
+			case "message": messageHandler(response);
+				break;
+			case "userid" : $("#userId").text(response.userid);
+				break;
+			case "name" : $(".name").val(response.name);
+				break;
+			case "dob" : $(".dob").val(response.dob);
+				break;
+			case "country" : $(".country").val(response.country);
+				break;
+			case "favcolor" : $(".favcolor").val(response.favcolor);
+				break;
+			case "last_updated" : $("#lastUpdated").text("Last updated: " + response.last_updated);
+				break;
+			default: console.log(response);
+				break;
 		}
 	}
 }
