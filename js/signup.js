@@ -1,39 +1,21 @@
-$(function(){
+$(() => {
 	$.post("php/retrieveUserData.php", "", responseHandler);
 	
 	$(".signUpButton").click(signup);
-	
 	$(".loginb").click(() => location.href = "login.html");
-	
-	$(".username > input").on("input", validate);
 
 	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
-
-	$(".password > input").on("input", () => $(".password > div").text(""));
+	
+	$(".username > input").on("input", () => validate("username"));
+	$(".password > input").on("input", () => validate("password"));
 });
-
-function validate(){
-	const usernameAlertDOM = $(".username > div");
-	
-	var n = $(".username > input").val();
-	
-	var inValPos = n.search(/[^A-Za-z0-9]/g);
-	
-	if(inValPos >= 0){
-		usernameAlertDOM.text("Only A-Z a-z and 0-9 are valid.");
-		return false;
-	} else {
-		usernameAlertDOM.text("");
-		return true;
-	}
-}
 
 function signup(){
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
 	var rL = $("#rememberLogin")[0].checked;
 		
-	if(n && p && validate()){
+	if(n && p && validate("username") && validate("password")){
 		$.post("php/signup.php",
 			"username=" + n + "&password=" + p + "&rememberLogin=" + rL,
 			responseHandler);
@@ -48,27 +30,15 @@ function signup(){
 	}
 }
 
-function responseHandler(data, status){
-	console.log(data, status);
-	
-	var responses = extractJSON(data);
-	
-	for(let response of responses){
-		if(typeof response == "object" && response.message){
-			messageHandler(response.message);
-		}
-	}
-}
-
-function messageHandler(message){
-	switch (message) {
+function messageHandler(response){
+	switch (response.message) {
 		case "logged in": location.href = "userdata.html";
 			break;
 		case "userExists": $(".username > div").text("Username already exists");
 			break;
 		case "signed up": location.href = "userdata.html";
 			break;
-		default: console.log(message);
+		default: console.log(response);
 			break;
 	}
 }

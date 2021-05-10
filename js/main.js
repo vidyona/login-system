@@ -42,3 +42,31 @@ function darkModeHandler(darkModeSwitch){
 
     localStorage.darkMode = darkModeSwitch.checked;
 }
+
+function validate(fieldName){
+    const usernameAlertDOM = $("." + fieldName + " > div");
+    
+    var n = $("." + fieldName + " > input").val();
+    
+    var inValPos = n.search(/[^a-zA-Z0-9-_.]/g);
+    
+    if(inValPos >= 0){
+        usernameAlertDOM.text("Only a-z A-Z 0-9 '-' '_' and '.' are allowed");
+        return false;
+    } else {
+        usernameAlertDOM.text("");
+        return true;
+    }
+}
+
+function responseHandler(data, status){
+    console.log({status: status, data: data});
+    
+    var responses = extractJSON(data);
+    
+    for(let response of responses){
+        if(typeof response == "object" && response.message){
+            messageHandler(response);
+        }
+    }
+}

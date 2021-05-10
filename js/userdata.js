@@ -1,4 +1,4 @@
-$(function(){
+$(() => {
 	$.post("php/retrieveUserData.php", "", responseHandler);
 	
 	$(".ssubmit").click(saveData);
@@ -60,9 +60,9 @@ function messageHandler(response){
 }
 
 function responseHandler(data, status){
-	console.log("data: " + data + "\n" + status);
+	console.log({status: status, data: data});
 	
-	var responses = extractJSON(data);console.log(responses);
+	var responses = extractJSON(data);
 		
 	for(let response of responses){
 		if(typeof response == "object"){
