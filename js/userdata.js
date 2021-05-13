@@ -1,10 +1,10 @@
 $(() => {
 	$.post("php/retrieveUserData.php", "", responseHandler);
-	
+
 	$(".ssubmit").click(saveData);
-	
+
 	$(".logout").click(() => $.post("php/logout.php", "", responseHandler));
-	
+
 	var options = "";
 
 	for(var cn of country_list){
@@ -39,10 +39,13 @@ function messageHandler(response){
 }
 
 function responseHandler(data, status){
-	console.log({status: status, data: data});
-	
+	data = "abc" + data;
+	data += "gfg";
+	console.log(status);
+	console.log(data);
+
 	var responses = extractJSON(data);
-		
+
 	for(let response of responses){
 		if(typeof response == "object"){
 			responseObjectHandler(response);

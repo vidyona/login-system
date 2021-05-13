@@ -11,11 +11,11 @@ if(isset($_COOKIE["token"]) && $userId = getTokenUser($conn)){
 }
 
 if(!isset($_SESSION['userid'])){
-    die(jsonMessage("not logged in"));
+	die(jsonMessage("not logged in"));
 }
 
 if(deleteUserAccount($conn, $_SESSION['userid'])){
-    echo jsonMessage("account_deleted");
+	echo jsonMessage("account_deleted");
 }
 
 session_destroy();

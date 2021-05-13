@@ -32,7 +32,7 @@ function setupDB($conn){
     $db_name = "login";
 
     $sql = "CREATE DATABASE IF NOT EXISTS $db_name";
-    
+
     if($conn->query($sql) === TRUE){
         if($conn->query("USE $db_name") !== TRUE){
             if($conn->error){
@@ -97,27 +97,31 @@ function jsonMessage($message){
 }
 
 function getuserdata($conn, $userId){
-    $sql = "SELECT userid, name, dob, country, favcolor, last_updated
-    FROM userdata WHERE userid LIKE '$userId'";
-	$result = $conn->query($sql);
-		
+  $stmt = $conn->prepare("SELECT userid, name, dob, country, favcolor, last_updated
+  FROM userdata WHERE userid LIKE ?");
+
+  $stmt->bind_param("s", $userId);
+	$stmt->execute();
+
+  $result = $stmt->get_result();
+
 	if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
-        echo jsonMessage("logged in") . json_encode($row);
+      echo jsonMessage("logged in") . json_encode($row);
 	} else {
-        return false;
-    }
+      return false;
+  }
 }
 
 function generateToken($conn){
 	$token = bin2hex(random_bytes(16));
-	
+
 	$sql = "SELECT token FROM usertoken WHERE token LIKE '$token'";
 	$result = $conn->query($sql);
-	
+
 	if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
 		$s_token = $row["token"];
 	}
-	
+
 	if(!isset($s_token) || $s_token != $token){
 		return $token;
 	}else{
@@ -129,9 +133,9 @@ function getTokenUser($conn){
     $clientToken = $_COOKIE["token"];
     $sql = "SELECT userid FROM rememberedLogin
     WHERE token LIKE '$clientToken'";
-	
+
     $result = $conn->query($sql);
-	
+
     if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
         if($userId = $row["userid"]){
             return $userId;
@@ -143,12 +147,15 @@ function getTokenUser($conn){
 
 function rememberLogin($conn, $userId){
     if($token = generateToken($conn)){
-        $sql = "insert into rememberedLogin(userid, token) values('$userId', '$token')";
-    
-        if($conn->query($sql) !== TRUE){
-            die(jsonMessage("Error storing token: " . $conn->error));
+        $stmt = $conn->prepare("insert into rememberedLogin(userid, token) values(?, ?)");
+
+        $stmt->bind_param("ss", $userId, $token);
+        $stmt->execute();
+
+        if($stmt->error){
+            die(jsonMessage("Error remembering User: " . $stmt->error));
         }
-    
+
         setcookie("token", $token, [
             'expires' => time() + 86400,
             'path' => '/',
@@ -161,11 +168,14 @@ function rememberLogin($conn, $userId){
 }
 
 function doesUserExists($conn, $userId){
-    $sql = "SELECT userid FROM userdata WHERE userid LIKE '$userId'";
-    
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT userid FROM userdata WHERE userid LIKE ?");
+    $stmt->bind_param("s", $userId);
 
-    if($conn->error){
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if($stmt->error){
         echo json_encode(array(
             'message'=>'Error finding user',
             'error'=>$conn->error,
@@ -174,9 +184,9 @@ function doesUserExists($conn, $userId){
     }
 
     if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
-	    return true;
+      return true;
     } else {
-        return false;
+      return false;
     }
 }
 
@@ -204,7 +214,7 @@ function validateUserInput($input){
 
 function validateIdPass($input){
     if (!preg_match("/^[a-zA-Z0-9-_. ]*$/",$input)) {
-        die(jsonMessage("Only a-z A-Z 0-9 '-' '_' and '.' are allowed"));
+        echo jsonMessage("Only a-z A-Z 0-9 '-' '_' and '.' are allowed");
     }
 }
 ?>

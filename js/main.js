@@ -6,10 +6,10 @@ function extractJSON(s){
             if(!j) continue;
 
             a = "{" + j;
-    
+
             if(jsonText = a.slice(a.search('{"'), a.search('}') + 2)){
                 responses.push(JSON.parse(jsonText));
-            }
+            } else {console.log(j)};
         }
     } catch (error) {
         console.log(error);
@@ -24,11 +24,11 @@ $(() => {
     if(localStorage.darkMode){
         darkModeSwitch.checked = JSON.parse(localStorage.darkMode);
     }
-    
+
     darkModeHandler(darkModeSwitch);
     $("#darkMode").change(() => darkModeHandler(darkModeSwitch));
 
-    
+
     $("#customForm input[type='password']").last().keypress((event) => {
         if(event.which == 13){
             $("#submitButton").click();
@@ -43,27 +43,28 @@ function darkModeHandler(darkModeSwitch){
     localStorage.darkMode = darkModeSwitch.checked;
 }
 
-function validate(fieldName){
-    const usernameAlertDOM = $("." + fieldName + " > div");
-    
-    var n = $("." + fieldName + " > input").val();
-    
-    var inValPos = n.search(/[^a-zA-Z0-9-_.]/g);
-    
-    if(inValPos >= 0){
-        usernameAlertDOM.text("Only a-z A-Z 0-9 '-' '_' and '.' are allowed");
-        return false;
-    } else {
-        usernameAlertDOM.text("");
-        return true;
-    }
-}
+// function validate(fieldName){
+//     const targetAlertDOM = $("." + fieldName + " > div");
+//
+//     var n = $("." + fieldName + " > input").val();
+//
+//     var inValPos = n.search(/[^a-zA-Z0-9-_.]/g);
+//
+//     if(inValPos >= 0){
+//         targetAlertDOM.text("Only a-z A-Z 0-9 '-' '_' and '.' are allowed");
+//         return false;
+//     }
+//
+//     targetAlertDOM.text("");
+//
+//     return true;
+// }
 
 function responseHandler(data, status){
     console.log({status: status, data: data});
-    
+
     var responses = extractJSON(data);
-    
+
     for(let response of responses){
         if(typeof response == "object" && response.message){
             messageHandler(response);

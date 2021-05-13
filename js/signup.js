@@ -1,21 +1,21 @@
 $(() => {
 	$.post("php/retrieveUserData.php", "", responseHandler);
-	
+
 	$(".signUpButton").click(signup);
 	$(".loginb").click(() => location.href = "login.html");
 
 	$(".password > input").focus(() => $(".password > input").removeAttr("readonly"));
-	
-	$(".username > input").on("input", () => validate("username"));
-	$(".password > input").on("input", () => validate("password"));
+
+	$(".username > input").on("input", (event) => $(".username > div").text(""));
+	$(".password > input").on("input", () => $(".password > div").text(""));
 });
 
 function signup(){
 	var n = $(".username > input").val();
 	var p = $(".password > input").val();
 	var rL = $("#rememberLogin")[0].checked;
-		
-	if(n && p && validate("username") && validate("password")){
+
+	if(n && p){
 		$.post("php/signup.php",
 			"username=" + n + "&password=" + p + "&rememberLogin=" + rL,
 			responseHandler);
@@ -24,7 +24,7 @@ function signup(){
 	if(!n){
 		$(".username > div").text("Please enter a username.");
 	}
-	
+
 	if(!p){
 		$(".password > div").text("Please enter a password.");
 	}

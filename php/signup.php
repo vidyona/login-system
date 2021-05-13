@@ -3,8 +3,8 @@
 require_once "utility.php";
 
 if(isset($_POST["username"]) && isset($_POST["password"])){
-	$userId = validateIdPass(validateUserInput($_POST["username"]));
-	$pass = validateIdPass(validateUserInput($_POST["password"]));
+	$userId = validateUserInput($_POST["username"]);
+	$pass = validateUserInput($_POST["password"]);
 }else{
 	die(jsonMessage("variables not set"));
 }
@@ -18,9 +18,11 @@ if(doesUserExists($conn, $userId)){
 
 echo jsonMessage("user does not exists");
 
-$sql = "insert into userdata(userid, password) values('$userId', '$pass')";
+$stmt = $conn->prepare("insert into userdata(userid, password) values(?, ?)");
 
-if($conn->query($sql) === TRUE){
+$stmt->bind_param("ss", $userId, $pass);
+
+if($stmt->execute()){
 	$_SESSION['userid'] = $userId;
 
 	if(!isset($_POST["rememberLogin"]) || $_POST["rememberLogin"] === "true"){
@@ -29,7 +31,7 @@ if($conn->query($sql) === TRUE){
 
 	echo jsonMessage("signed up");
 } else {
-	die($conn->error);
+	die(jsonMessage($conn->error));
 }
 
 $conn->close();
