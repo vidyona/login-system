@@ -39,8 +39,6 @@ function messageHandler(response){
 }
 
 function responseHandler(data, status){
-	data = "abc" + data;
-	data += "gfg";
 	console.log(status);
 	console.log(data);
 

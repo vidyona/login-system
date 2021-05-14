@@ -115,14 +115,17 @@ function getuserdata($conn, $userId){
 function generateToken($conn){
 	$token = bin2hex(random_bytes(16));
 
-	$sql = "SELECT token FROM usertoken WHERE token LIKE '$token'";
-	$result = $conn->query($sql);
+	$stmt = $conn->prepare("SELECT token FROM rememberedLogin WHERE token LIKE ?");
+  $stmt->bind_param("s", $token);
+  $stmt->execute();
+
+	$result = $stmt->get_result();
 
 	if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
 		$s_token = $row["token"];
 	}
 
-	if(!isset($s_token) || $s_token != $token){
+	if(!isset($row["token"]) || $row["token"] != $token){
 		return $token;
 	}else{
 		return false;
@@ -131,10 +134,12 @@ function generateToken($conn){
 
 function getTokenUser($conn){
     $clientToken = $_COOKIE["token"];
-    $sql = "SELECT userid FROM rememberedLogin
-    WHERE token LIKE '$clientToken'";
+    $stmt = $conn->prepare("SELECT userid FROM rememberedLogin
+    WHERE token LIKE ?");
+    $stmt->bind_param("s", $clientToken);
+    $stmt->execute();
 
-    $result = $conn->query($sql);
+    $result = $stmt->get_result();
 
     if($result && $result->num_rows > 0 && $row = $result->fetch_assoc()){
         if($userId = $row["userid"]){
