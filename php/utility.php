@@ -196,17 +196,18 @@ function doesUserExists($conn, $userId){
 }
 
 function forgetLogin($conn, $clientToken){
-    $sql = "DELETE FROM rememberedLogin WHERE token LIKE '$clientToken'";
-    $success = $conn->query($sql);
+    $stmt = $conn->prepare("DELETE FROM rememberedLogin WHERE token LIKE ?");
+    $stmt->bind_param("s", $clientToken);
+    $stmt->execute();
 
-	setcookie("token", "", 0, "/");
-
-    return $success;
+    setcookie("token", "", 0, "/");
 }
 
 function deleteUserAccount($conn, $userId){
-    $sql = "DELETE FROM userdata WHERE userid LIKE '$userId'";
-    return $conn->query($sql);
+    $stmt = $conn->prepare("DELETE FROM userdata WHERE userid LIKE ?");
+    $stmt->bind_param("s", $userId);
+
+    return $stmt->execute();
 }
 
 function validateUserInput($input){
