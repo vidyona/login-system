@@ -27,13 +27,18 @@
         <div class="username form-group">
             <label for="username">Username: </label>
             <input class="form-control" id="username" autocomplete="off" placeholder="Enter username"/>
-            <div class="form-alert alert text-danger"></div>
+            <div class="form-alert alert text-danger" id="usernameAlert"></div>
         </div>
 
         <div class="password form-group">
             <label for="password">Password: </label>
-            <input class="form-control" id="password" type="password" readonly placeholder="Enter password"/>
-            <div class="form-alert alert text-danger"></div>
+            <div class="input-group">
+              <input class="form-control input-bg-color" id="password" type="password" readonly placeholder="Enter password"/>
+              <div class="input-group-append">
+                <button class="input-group-text btn input-bg-color">@</button>
+              </div>
+            </div>
+            <div class="form-alert alert text-danger" id="passwordAlert"></div>
         </div>
 
         <div class="custom-control custom-checkbox form-group">
