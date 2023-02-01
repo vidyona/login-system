@@ -13,7 +13,7 @@ session_start();
 function openConnection(){
     define("host", "localhost");
     define("user", "root");
-    define("pass", "password");
+    define("pass", "");
 
     $conn = new mysqli(host, user, pass);
 
